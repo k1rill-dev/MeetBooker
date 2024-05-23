@@ -1,0 +1,57 @@
+version: "3.7"
+services:
+  web:
+    container_name: "web"
+    image: nginx:alpine
+    depends_on:
+      - app
+    ports:
+      - "8082:80"
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+    networks:
+      - custom
+  app:
+    container_name: "app"
+    image: app
+    environment:
+      - DATABASE_URL=postgresql://fastapi:fastapi@db:5432/fastapi
+    build:
+      context: backend
+    ports:
+      - "8000:8000"
+    networks:
+      - custom
+    depends_on:
+      - db
+  frontend:
+    container_name: "frontend"
+    image: frontend
+    build:
+      context: frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - custom
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=fastapi
+      - POSTGRES_PASSWORD=fastapi
+      - POSTGRES_DB=fastapi
+    networks:
+      - custom
+
+volumes:
+  postgres_data:
+
+networks:
+  custom:
+    driver: bridge
