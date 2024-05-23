@@ -8,7 +8,7 @@ env.read_envfile()
 
 
 class Settings(BaseSettings):
-    db_url: str = env.str('DATABASE_URL', default='sqlite:///db.sqlite3')
+    db_url: str = env.str('DATABASE_URL', default='postgresql+asyncpg://postgres:lolkek123@localhost:5432/postgres')
 
 
 settings = Settings()
