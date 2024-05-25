@@ -1,0 +1,4 @@
+from .user_repo import UsersRepository
+from .specialist_repo import SpecialistRepository, SpecialistRatingRepository
+from .appointment_repo import AppointmentRepository
+from .schedule_slots_repo import ScheduleSlotsRepository
