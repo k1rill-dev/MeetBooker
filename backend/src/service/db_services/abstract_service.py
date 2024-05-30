@@ -6,14 +6,10 @@ from src.service.unit_of_work.unit_of_work import IUnitOfWork
 
 
 class AbstractService(ABC):
-    def __init__(self, uow: IUnitOfWork, repo: AbstractRepository):
-        self._repo: AbstractRepository = repo()
-        self._uow = uow
-
     @abstractmethod
-    async def add(self, data: BaseModel):
+    async def add(self, uow: IUnitOfWork, data: BaseModel):
         raise NotImplementedError
 
     @abstractmethod
-    async def list(self, **filter_by: dict):
+    async def list(self, uow: IUnitOfWork, **filter_by: dict):
         raise NotImplementedError

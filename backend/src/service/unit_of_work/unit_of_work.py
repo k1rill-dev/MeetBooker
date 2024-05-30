@@ -39,19 +39,19 @@ class UnitOfWork:
         self.session_factory = async_session_maker
 
     async def __aenter__(self):
-        self.session = self.session_factory()
-        self.users = UsersRepository(self.session)
-        self.appointments = AppointmentRepository(self.session)
-        self.schedule_slots = ScheduleSlotsRepository(self.session)
-        self.specialist = SpecialistRepository(self.session)
-        self.specialist_ratings = SpecialistRatingRepository(self.session)
+        self._session = self.session_factory()
+        self.users = UsersRepository(self._session)
+        self.appointments = AppointmentRepository(self._session)
+        self.schedule_slots = ScheduleSlotsRepository(self._session)
+        self.specialist = SpecialistRepository(self._session)
+        self.specialist_ratings = SpecialistRatingRepository(self._session)
 
     async def __aexit__(self, *args):
         await self.rollback()
-        await self.session.close()
+        await self._session.close()
 
     async def commit(self):
-        await self.session.commit()
+        await self._session.commit()
 
     async def rollback(self):
-        await self.session.rollback()
+        await self._session.rollback()

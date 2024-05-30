@@ -1,27 +1,21 @@
-from typing import Any
-
 from src.adapters.repository import AbstractRepository
 from src.service.db_services.abstract_service import AbstractService
 from src.service.unit_of_work.unit_of_work import IUnitOfWork
 
 
 class SpecialistService(AbstractService):
-    def __init__(self, uow: IUnitOfWork, repo: AbstractRepository):
-        super().__init__(uow, repo)
 
-    async def add(self, data: Any):
+    async def add(self, uow: IUnitOfWork, data):
         pass
 
-    async def list(self):
+    async def list(self, uow: IUnitOfWork, **filter_by):
         pass
 
 
 class SpecialistRatingService(AbstractService):
-    def __init__(self, uow: IUnitOfWork, repo: AbstractRepository):
-        super().__init__(uow, repo)
 
-    async def add(self, data: Any):
+    async def add(self, uow: IUnitOfWork, data):
         pass
 
-    async def list(self):
+    async def list(self, uow: IUnitOfWork, **filter_by):
         pass

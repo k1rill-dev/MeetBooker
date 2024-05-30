@@ -1,3 +1,4 @@
+import uuid
 from uuid import UUID
 
 from sqlalchemy import ForeignKey
@@ -9,7 +10,7 @@ from src.adapters.models import Base
 class Appointment(Base):
     __tablename__ = 'appointments'
 
-    id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
     user_id: Mapped[UUID] = mapped_column(ForeignKey('users.id'))
     specialist_id: Mapped[UUID] = mapped_column(ForeignKey('specialists.id'))
     slot_id: Mapped[UUID] = mapped_column(ForeignKey('schedule_slots.id'))
