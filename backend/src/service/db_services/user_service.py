@@ -36,3 +36,12 @@ class UserService(AbstractService):
             except IntegrityError:
                 await uow.rollback()
                 raise HTTPException(status_code=400, detail='User does not exist')
+
+    async def get(self, uow: IUnitOfWork, **filter_by) -> Optional[UserSchema]:
+        async with uow:
+            try:
+                user = await uow.users.find_one(**filter_by)
+                return user
+            except IntegrityError:
+                await uow.rollback()
+                raise HTTPException(status_code=400, detail='User does not exist')

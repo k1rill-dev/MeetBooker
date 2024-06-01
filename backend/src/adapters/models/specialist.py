@@ -11,13 +11,13 @@ class Specialist(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
     speciality: Mapped[str] = mapped_column(String(100))
     bio: Mapped[str] = mapped_column(String(255))
-    user_id: Mapped[str] = mapped_column(ForeignKey('users.id'))
+    user_id: Mapped[UUID] = mapped_column(ForeignKey('users.id'))
 
 
 class SpecialistRating(Base):
     __tablename__ = 'specialist_ratings'
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
-    user_id: Mapped[str] = mapped_column(ForeignKey('users.id'))
-    specialist_id: Mapped[str] = mapped_column(ForeignKey('specialists.id'))
+    user_id: Mapped[UUID] = mapped_column(ForeignKey('users.id'))
+    specialist_id: Mapped[UUID] = mapped_column(ForeignKey('specialists.id'))
     rating: Mapped[float]

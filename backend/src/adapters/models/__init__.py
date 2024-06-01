@@ -3,3 +3,4 @@ from .base import Base
 from .specialist import Specialist, SpecialistRating
 from .schedule_slots import ScheduleSlot
 from .appointments import Appointment
+from .issued_tokens import IssuedTokens

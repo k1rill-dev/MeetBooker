@@ -4,6 +4,7 @@ from typing import Type
 from src.db.db import async_session_maker
 from src.repositories import UsersRepository, AppointmentRepository, ScheduleSlotsRepository, SpecialistRepository, \
     SpecialistRatingRepository
+from src.repositories.issued_tokens_repo import IssuedTokensRepository
 
 
 class IUnitOfWork(ABC):
@@ -12,6 +13,7 @@ class IUnitOfWork(ABC):
     schedule_slots: Type[ScheduleSlotsRepository]
     specialist: Type[SpecialistRepository]
     specialist_ratings: Type[SpecialistRatingRepository]
+    issued_tokens: Type[IssuedTokensRepository]
 
     @abstractmethod
     def __init__(self):
@@ -34,7 +36,7 @@ class IUnitOfWork(ABC):
         ...
 
 
-class UnitOfWork:
+class UnitOfWork(IUnitOfWork):
     def __init__(self):
         self.session_factory = async_session_maker
 
@@ -45,6 +47,7 @@ class UnitOfWork:
         self.schedule_slots = ScheduleSlotsRepository(self._session)
         self.specialist = SpecialistRepository(self._session)
         self.specialist_ratings = SpecialistRatingRepository(self._session)
+        self.issued_tokens = IssuedTokensRepository(self._session)
 
     async def __aexit__(self, *args):
         await self.rollback()
