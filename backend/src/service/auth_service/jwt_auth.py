@@ -64,7 +64,7 @@ class JWTAuth:
                                                  TokenTypes.REFRESH_TOKEN.value)
         return TokensSchema(access_token=access_token, refresh_token=refresh_token)
 
-    async def _set_cookies(self, response: Response, tokens: TokensSchema):
+    async def _set_cookies(self, response: Response, tokens: TokensSchema, user_id: uuid.UUID):
         """
         устанавливает cookie в response
         :param response: response из FastAPI
@@ -73,7 +73,7 @@ class JWTAuth:
         """
         response.set_cookie("access_token", tokens.access_token, httponly=True)
         response.set_cookie("refresh_token", tokens.refresh_token, httponly=True)
-        response.set_cookie("login", "true", httponly=True)
+        response.set_cookie("login", str(user_id))
 
     async def unset_cookies(self, response: Response):
         response.delete_cookie("login")
@@ -89,7 +89,7 @@ class JWTAuth:
         :return: None
         """
         tokens = await self._get_tokens(payload, uow)
-        await self._set_cookies(response, tokens)
+        await self._set_cookies(response, tokens, payload["sub"])
 
     @staticmethod
     async def validate_token(token: Token) -> dict:

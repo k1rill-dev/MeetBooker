@@ -6,6 +6,7 @@ from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src.adapters.models import Base
+from src.schemas.schedule import ScheduleSchema
 
 
 class ScheduleSlot(Base):
@@ -16,3 +17,12 @@ class ScheduleSlot(Base):
     start_time: Mapped[datetime] = mapped_column(DateTime)
     end_time: Mapped[datetime] = mapped_column(DateTime)
     is_booked: Mapped[bool]
+
+    def to_read_model(self) -> ScheduleSchema:
+        return ScheduleSchema(
+            id=self.id,
+            specialist_id=self.specialist_id,
+            start_time=self.start_time,
+            end_time=self.end_time,
+            is_booked=self.is_booked
+        )

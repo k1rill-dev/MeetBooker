@@ -1,3 +1,4 @@
+from typing import Any
 from uuid import UUID
 
 from src.adapters.models import SpecialistRating
@@ -14,7 +15,7 @@ class SpecialistService(AbstractService):
             await uow.commit()
             return spec
 
-    async def list(self, uow: IUnitOfWork, **filter_by):
+    async def list(self, uow: IUnitOfWork, **filter_by: Any):
         async with uow:
             res = await uow.specialist.find_all(**filter_by)
             return res
@@ -39,7 +40,7 @@ class SpecialistRatingService(AbstractService):
             await uow.commit()
             return rating
 
-    async def list(self, uow: IUnitOfWork, **filter_by):
+    async def list(self, uow: IUnitOfWork, **filter_by: Any):
         async with uow:
             ratings = await uow.specialist_ratings.sum(SpecialistRating.rating, **filter_by)
             return ratings

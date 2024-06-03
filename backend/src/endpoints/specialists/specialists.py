@@ -1,7 +1,7 @@
 from uuid import UUID
 from fastapi import APIRouter, Depends
 from src.endpoints.dependencies import UnitOfWorkDependency, get_user_from_token
-from src.schemas.specialists import SpecialistSchema
+from src.schemas.specialists import SpecialistSchema, SpecialistRatingSchema
 from src.schemas.user import UserSchema
 from src.service.db_services.specialist_service import SpecialistService, SpecialistRatingService
 
@@ -33,3 +33,10 @@ async def update_specialist(uow: UnitOfWorkDependency,
     spec_id = await SpecialistService().get(spec_data.id, uow)
     specialist = await SpecialistService().update(uow=uow, pk=spec_id.id, data=spec_data)
     return specialist
+
+
+@specialists_router.post("/specialist-rating")
+async def set_specialist_rating(uow: UnitOfWorkDependency, rating_data: SpecialistRatingSchema,
+                                user: UserSchema = Depends(get_user_from_token)):
+    rating = await SpecialistRatingService().add(uow, rating_data)
+    return rating

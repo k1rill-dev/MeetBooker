@@ -13,3 +13,10 @@ class SpecialistSchema(BaseModel):
         from_attributes = True
 
 
+class SpecialistRatingSchema(BaseModel):
+    user_id: UUID
+    specialist_id: UUID
+    rating: float
+
+    class Config:
+        from_attributes = True

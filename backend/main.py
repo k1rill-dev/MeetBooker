@@ -1,9 +1,13 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqladmin import Admin, ModelView
 from starlette.staticfiles import StaticFiles
 
-from src.endpoints.auth import all_routers
+from src.adapters.models import User
+from src.db.db import engine
+from src.endpoints.auth import auth_router
+from src.endpoints.specialists import specialists_router
 
 app = FastAPI()
 
@@ -23,6 +27,14 @@ app.add_middleware(
 )
 
 app.mount("/media", StaticFiles(directory="media"), name="media")
+admin = Admin(app, engine)
+
+
+class UserAdmin(ModelView, model=User):
+    column_list = [User.id, User.first_name, User.last_name, User.email]
+
+
+admin.add_view(UserAdmin)
 
 
 @app.get("/api")
@@ -30,7 +42,9 @@ async def root():
     return {"message": "Hello World"}
 
 
-[app.include_router(router, prefix="/api") for router in all_routers]
+app.include_router(auth_router, prefix="/api")
+app.include_router(specialists_router, prefix="/api")
+app.include_router(specialists_router, prefix="/api")
 
 if __name__ == "__main__":
     uvicorn.run('main:app', host='localhost', port=8000, reload=True)

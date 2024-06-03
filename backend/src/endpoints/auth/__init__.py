@@ -1,1 +1,1 @@
-from .routers import all_routers
+from .login import auth_router
