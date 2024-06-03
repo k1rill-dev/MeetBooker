@@ -4,19 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8b82d0ae-3061-4ce1-9900-34296bd7a3f2" name="Changes" comment="add refactoring, add register logic">
+    <list default="true" id="8b82d0ae-3061-4ce1-9900-34296bd7a3f2" name="Changes" comment="add token, auth and jwt services">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/adapters/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/adapters/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/migrations/versions/086bbfc76c56_add_base_tables_to_db.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/migrations/versions/1cdcbea7dc6e_add_base_tables_to_db.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/migrations/versions/29fc491c5f54_upd.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/migrations/versions/5377450aa42a_add_issued_tokens_table_and_change_.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/migrations/versions/6db39c360a06_init.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/migrations/versions/755469691153_add_unique_type_to_email.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/migrations/versions/7c6998924234_add_default_value_to_id_fields.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/migrations/versions/899d7bc352f7_change_type_of_profile_picture.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/poetry.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pyproject.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/adapters/models/issued_tokens.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/adapters/models/issued_tokens.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/adapters/models/schedule_slots.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/adapters/models/schedule_slots.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/adapters/models/specialist.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/adapters/models/specialist.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/adapters/repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/adapters/repository.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/endpoints/auth/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/endpoints/auth/login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/endpoints/auth/register.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/endpoints/auth/routers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/endpoints/auth/routers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/endpoints/dependencies.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/endpoints/dependencies.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/schemas/issued_tokens.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/schemas/issued_tokens.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/schemas/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/schemas/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/service/auth_service/auth_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/service/auth_service/auth_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/service/auth_service/jwt_auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/service/auth_service/jwt_auth.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/service/auth_service/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/service/auth_service/types.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/service/db_services/specialist_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/service/db_services/specialist_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/service/db_services/tokens_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/service/db_services/tokens_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/service/db_services/user_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/service/db_services/user_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/service/unit_of_work/unit_of_work.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/service/unit_of_work/unit_of_work.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +99,7 @@
       <recent name="D:\PythonProjects\anotherFastAPI\backend\src\adapters" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.jwt_auth">
+  <component name="RunManager" selected="Python.main">
     <configuration name="config" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="anotherFastAPI" />
       <option name="ENV_FILES" value="" />
@@ -175,9 +192,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.jwt_auth" />
         <item itemvalue="Python.config" />
-        <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>
@@ -217,6 +234,10 @@
       <workItem from="1717057633673" duration="9999000" />
       <workItem from="1717139201847" duration="13278000" />
       <workItem from="1717231919014" duration="1898000" />
+      <workItem from="1717234202598" duration="5075000" />
+      <workItem from="1717318634498" duration="17990000" />
+      <workItem from="1717344059264" duration="17000" />
+      <workItem from="1717404678735" duration="3367000" />
     </task>
     <task id="LOCAL-00001" summary="init project with docker, frontend, nginx, poetry">
       <option name="closed" value="true" />
@@ -258,7 +279,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717068049509</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add token, auth and jwt services">
+      <option name="closed" value="true" />
+      <created>1717234244000</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1717234244001</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -273,10 +302,11 @@
     <MESSAGE value="add models" />
     <MESSAGE value="add services and unit of work pattern implementation" />
     <MESSAGE value="add refactoring, add register logic" />
-    <option name="LAST_COMMIT_MESSAGE" value="add refactoring, add register logic" />
+    <MESSAGE value="add token, auth and jwt services" />
+    <option name="LAST_COMMIT_MESSAGE" value="add token, auth and jwt services" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/anotherFastAPI$main.coverage" NAME="main Coverage Results" MODIFIED="1716999847249" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
+    <SUITE FILE_PATH="coverage/anotherFastAPI$main.coverage" NAME="main Coverage Results" MODIFIED="1717335628546" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
     <SUITE FILE_PATH="coverage/anotherFastAPI$anotherFastAPI.coverage" NAME="anotherFastAPI Coverage Results" MODIFIED="1716207835661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/anotherFastAPI$jwt_auth.coverage" NAME="jwt_auth Coverage Results" MODIFIED="1717074052879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/src/service/auth_service" />
     <SUITE FILE_PATH="coverage/anotherFastAPI$config.coverage" NAME="config Coverage Results" MODIFIED="1717070740505" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />

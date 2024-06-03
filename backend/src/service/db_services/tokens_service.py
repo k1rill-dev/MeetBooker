@@ -6,7 +6,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 from sqlalchemy.exc import IntegrityError
 
-from src.schemas.issued_tokens import IssuedTokensSchema
+from src.schemas.issued_tokens import IssuedTokensSchema, UpdateIssuedTokensSchema
 from src.service.db_services.abstract_service import AbstractService
 from src.service.unit_of_work.unit_of_work import IUnitOfWork
 
@@ -16,6 +16,7 @@ class TokenService(AbstractService):
         insert_data = data.model_dump()
         async with uow:
             pk = await uow.issued_tokens.add_one(data=insert_data)
+            await uow.commit()
             return pk
 
     async def list(self, uow: IUnitOfWork, **filter_by) -> List[IssuedTokensSchema]:
@@ -35,16 +36,19 @@ class TokenService(AbstractService):
     async def edit(self, uow: IUnitOfWork, id: UUID, data: IssuedTokensSchema) -> UUID:
         async with uow:
             pk = await uow.issued_tokens.edit_one(id=id, data=data.model_dump())
+            await uow.commit()
             return pk
 
     async def check_revoked(self, jti: UUID, uow: IUnitOfWork) -> bool:
         async with uow:
-            res = await uow.issued_tokens.find_all(jti=jti)
-            if res:
+            res = await uow.issued_tokens.find_all(id=jti)
+            result = [row for row in res if row.revoke is True]
+            if result:
                 return True
             return False
 
-    async def edit_multiple(self, uow: IUnitOfWork, data: IssuedTokensSchema):
+    async def edit_multiple(self, uow: IUnitOfWork, data: UpdateIssuedTokensSchema, **filter_by):
         async with uow:
-            res = await uow.issued_tokens.edit_multiply(updated_data=data.model_dump(), subject=data.subject)
+            res = await uow.issued_tokens.edit_multiply(updated_data=data.model_dump(), **filter_by)
+            await uow.commit()
             return res

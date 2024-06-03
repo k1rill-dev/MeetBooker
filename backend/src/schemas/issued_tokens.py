@@ -4,10 +4,14 @@ from pydantic import BaseModel
 
 
 class IssuedTokensSchema(BaseModel):
-    jti: UUID
+    id: UUID
     subject: UUID
-    revoked: bool
+    revoke: bool
     device_id: UUID
 
     class Config:
         from_attributes = True
+
+
+class UpdateIssuedTokensSchema(BaseModel):
+    revoke: bool

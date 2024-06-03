@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     access_token_expires_minutes: int = env.int('ACCESS_TOKEN_EXPIRE_MINUTES', default=15)
     refresh_token_expires_days: int = env.int('REFRESH_TOKEN_EXPIRE_DAYS', default=30)
     jwt_algorithm: str = env.str('JWT_ALGORITHM', default='RS256')
+    path_to_media: pathlib.Path = BASE_DIR.joinpath('backend/media/')
 
 
 settings = Settings()

@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from pydantic import NameEmail
 from sqlalchemy.exc import IntegrityError
 from src.endpoints.auth.utils import Hasher
-from src.schemas.user import AddUserSchema, UserSchema
+from src.schemas.user import AddUserSchema, UserSchema, UpdateUserSchema
 from src.service.db_services.abstract_service import AbstractService
 from src.service.unit_of_work.unit_of_work import IUnitOfWork
 
@@ -45,3 +45,10 @@ class UserService(AbstractService):
             except IntegrityError:
                 await uow.rollback()
                 raise HTTPException(status_code=400, detail='User does not exist')
+
+    async def edit(self, uow: IUnitOfWork, data: dict, pk: UUID) -> UserSchema:
+        async with uow:
+            user = await uow.users.edit_one(pk=pk, data=data)
+            await uow.commit()
+            print(user)
+            return user

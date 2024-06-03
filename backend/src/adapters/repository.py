@@ -5,6 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel
 from sqlalchemy import insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.sql import func
 
 PrimaryKey = TypeVar('PrimaryKey')
 
@@ -30,10 +31,10 @@ class SQLAlchemyRepository(AbstractRepository):
         res = await self.session.execute(stmt)
         return res.scalar_one()
 
-    async def edit_one(self, id: int, data: dict) -> PrimaryKey:
-        stmt = update(self.model).values(**data).filter_by(id=id).returning(self.model.id)
+    async def edit_one(self, pk: UUID, data: dict) -> BaseModel:
+        stmt = update(self.model).values(**data).where(self.model.id == pk).returning(self.model)
         res = await self.session.execute(stmt)
-        return res.scalar_one()
+        return res.scalar_one().to_read_model()
 
     async def find_all(self, **filter_by):
         stmt = select(self.model).filter_by(**filter_by)
@@ -48,6 +49,11 @@ class SQLAlchemyRepository(AbstractRepository):
         return res
 
     async def edit_multiply(self, updated_data: dict, **filter_by):
-        stmt = update(self.model).filter_by(**filter_by).values(**updated_data).returning(self.model.id)
+        stmt = update(self.model).filter_by(**filter_by).values(**updated_data)
+        res = await self.session.execute(stmt)
+        return res
+
+    async def sum(self, field, **filter_by):
+        stmt = select(func.sum(field)).filter_by(**filter_by)
         res = await self.session.execute(stmt)
         return res

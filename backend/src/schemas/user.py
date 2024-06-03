@@ -37,3 +37,13 @@ class LoginUserSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UpdateUserSchema(BaseModel):
+    email: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    profile_picture: Optional[str] = None
+
+    class Config:
+        from_attributes = True

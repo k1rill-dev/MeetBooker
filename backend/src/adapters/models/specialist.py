@@ -3,6 +3,7 @@ from uuid import UUID
 from sqlalchemy import String, ForeignKey, Float
 from sqlalchemy.orm import Mapped, mapped_column
 from src.adapters.models import Base
+from src.schemas.specialists import SpecialistSchema
 
 
 class Specialist(Base):
@@ -11,7 +12,14 @@ class Specialist(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
     speciality: Mapped[str] = mapped_column(String(100))
     bio: Mapped[str] = mapped_column(String(255))
-    user_id: Mapped[UUID] = mapped_column(ForeignKey('users.id'))
+    user_id: Mapped[UUID] = mapped_column(ForeignKey('users.id'), unique=True)
+
+    def to_read_model(self) -> SpecialistSchema:
+        return SpecialistSchema(
+            speciality=self.speciality,
+            bio=self.bio,
+            user_id=self.user_id
+        )
 
 
 class SpecialistRating(Base):

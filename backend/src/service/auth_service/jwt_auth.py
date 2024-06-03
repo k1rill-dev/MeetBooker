@@ -10,18 +10,16 @@ from starlette.status import HTTP_401_UNAUTHORIZED
 from config import settings
 from src.schemas.issued_tokens import IssuedTokensSchema
 from src.schemas.token import TokensSchema
-from src.service.auth_service.types import AccessToken, Token, RefreshToken
+from src.service.auth_service.types import AccessToken, Token, RefreshToken, TokenTypes
 from src.service.db_services.tokens_service import TokenService
 from src.service.db_services.user_service import UserService
 from src.service.unit_of_work.unit_of_work import IUnitOfWork, UnitOfWork
 
 
-class TokenTypes(enum.Enum):
-    ACCESS_TOKEN = 'access_token'
-    REFRESH_TOKEN = 'refresh_token'
-
-
 class JWTAuth:
+    async def __gen_device_id(self):
+        return uuid.uuid4()
+
     async def _create_token(self, payload: dict, uow: IUnitOfWork, expires_at: int, token_type: str) -> Token:
         """
         Создает JWT токен
@@ -41,14 +39,16 @@ class JWTAuth:
             "exp": expires_at,
             "iat": datetime.utcnow(),
             "jti": str(uuid.uuid4()),
+            "device_id": str(await self.__gen_device_id()),
         })
         encoded_token = jwt.encode(to_encode, settings.private_key, algorithm=settings.jwt_algorithm)
-        await TokenService().add(uow, IssuedTokensSchema(
-            jti=to_encode["jti"],
-            subject=to_encode['sub'],
-            device_id=str(uuid.uuid4()),
+        data = IssuedTokensSchema(
+            id=to_encode["jti"],
+            subject=uuid.UUID(to_encode['sub']),
+            device_id=to_encode['device_id'],
             revoke=False
-        ))
+        )
+        _ = await TokenService().add(uow=uow, data=data)
         return encoded_token
 
     async def _get_tokens(self, payload: dict, uow: IUnitOfWork) -> TokensSchema:
@@ -71,10 +71,8 @@ class JWTAuth:
         :param tokens: токены
         :return: None
         """
-        response.set_cookie("access_token", tokens.access_token, httponly=True,
-                            expires=datetime.utcnow() + timedelta(minutes=settings.access_token_expires_minutes))
-        response.set_cookie("refresh_token", tokens.refresh_token, httponly=True,
-                            expires=datetime.utcnow() + timedelta(days=settings.refresh_token_expires_days))
+        response.set_cookie("access_token", tokens.access_token, httponly=True)
+        response.set_cookie("refresh_token", tokens.refresh_token, httponly=True)
         response.set_cookie("login", "true", httponly=True)
 
     async def unset_cookies(self, response: Response):
@@ -110,6 +108,5 @@ class JWTAuth:
             raise HTTPException(status_code=HTTP_401_UNAUTHORIZED,
                                 detail="Get access token, not refresh token")
         tokens = await TokenService().list(uow, subject=payload["sub"])
-        # _ = await TokenService().edit(uow=uow, id=token.jti, data=token)
         await self.unset_cookies(response)
         await self.get_cookies(response, payload, uow)
