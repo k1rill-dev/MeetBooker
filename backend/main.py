@@ -8,6 +8,7 @@ from src.adapters.models import User
 from src.db.db import engine
 from src.endpoints.auth import auth_router
 from src.endpoints.specialists import specialists_router
+from src.endpoints.schedule import schedule_routes
 
 app = FastAPI()
 
@@ -44,7 +45,7 @@ async def root():
 
 app.include_router(auth_router, prefix="/api")
 app.include_router(specialists_router, prefix="/api")
-app.include_router(specialists_router, prefix="/api")
+app.include_router(schedule_routes, prefix="/api")
 
 if __name__ == "__main__":
     uvicorn.run('main:app', host='localhost', port=8000, reload=True)

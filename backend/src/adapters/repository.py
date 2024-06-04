@@ -56,4 +56,4 @@ class SQLAlchemyRepository(AbstractRepository):
     async def sum(self, field, **filter_by):
         stmt = select(func.sum(field)).filter_by(**filter_by)
         res = await self.session.execute(stmt)
-        return res
+        return res.all()

@@ -19,6 +19,7 @@ class Appointment(Base):
 
     def to_read_model(self) -> AppointmentSchema:
         return AppointmentSchema(
+            id=self.id,
             user_id=self.user_id,
             specialist_id=self.specialist_id,
             slot_id=self.slot_id,

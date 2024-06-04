@@ -1,8 +1,8 @@
 from uuid import UUID
 from fastapi import APIRouter, Depends
 from src.endpoints.dependencies import UnitOfWorkDependency, get_user_from_token, get_specialist_from_token
-from src.schemas.appointments import AppointmentSchema
-from src.schemas.schedule import ScheduleSchema
+from src.schemas.appointments import CreateAppointmentSchema, UpdateAppointmentSchema
+from src.schemas.schedule import ScheduleSchema, CreateScheduleSchema, UpdateScheduleSchema
 from src.schemas.user import UserSchema
 from src.service.db_services.appointment_service import AppointmentService
 from src.service.db_services.schedule_service import ScheduleService
@@ -23,7 +23,7 @@ async def get_appointment(uow: UnitOfWorkDependency, user: UserSchema = Depends(
 
 
 @schedule_routes.post("/schedule")
-async def create_schedule(uow: UnitOfWorkDependency, schedule: ScheduleSchema,
+async def create_schedule(uow: UnitOfWorkDependency, schedule: CreateScheduleSchema,
                           user: UserSchema = Depends(get_specialist_from_token)):
     """
     создает новый слот расписания у специалиста
@@ -33,6 +33,8 @@ async def create_schedule(uow: UnitOfWorkDependency, schedule: ScheduleSchema,
     :return:
     """
     schedule.specialist_id = user.id
+    schedule.start_time = schedule.start_time.replace(tzinfo=None)
+    schedule.end_time = schedule.end_time.replace(tzinfo=None)
     slot = await ScheduleService().add(uow=uow, data=schedule)
     return slot
 
@@ -49,8 +51,8 @@ async def get_schedule(uow: UnitOfWorkDependency, specialist_id: UUID):
     return schedule
 
 
-@schedule_routes.put("/schedule/{schedule_id}")
-async def update_schedule(uow: UnitOfWorkDependency, schedule_id: UUID, schedule: ScheduleSchema,
+@schedule_routes.patch("/schedule/{schedule_id}")
+async def update_schedule(uow: UnitOfWorkDependency, schedule_id: UUID, schedule: UpdateScheduleSchema,
                           user: UserSchema = Depends(get_specialist_from_token)):
     """
     редактирование расписания
@@ -61,18 +63,22 @@ async def update_schedule(uow: UnitOfWorkDependency, schedule_id: UUID, schedule
     :return:
     """
     schedule.specialist_id = user.id
+    if schedule.start_time is not None:
+        schedule.start_time = schedule.start_time.replace(tzinfo=None)
+    if schedule.end_time is not None:
+        schedule.end_time = schedule.end_time.replace(tzinfo=None)
     res = await ScheduleService().edit(uow=uow, pk=schedule_id, data=schedule)
     return res
 
 
 @schedule_routes.post("/appointment", dependencies=[Depends(get_user_from_token), ])
-async def create_appointment(uow: UnitOfWorkDependency, appointment_data: AppointmentSchema):
+async def create_appointment(uow: UnitOfWorkDependency, appointment_data: CreateAppointmentSchema):
     appointment = await AppointmentService().add(uow=uow, data=appointment_data)
     return appointment
 
 
-@schedule_routes.put("/appointment/{appointment_id}")
-async def update_appointment(uow: UnitOfWorkDependency, appointment_id: UUID, appointment_data: AppointmentSchema,
+@schedule_routes.patch("/appointment/{appointment_id}")
+async def update_appointment(uow: UnitOfWorkDependency, appointment_id: UUID, appointment_data: UpdateAppointmentSchema,
                              user: UserSchema = Depends(get_user_from_token)):
     appointment = await AppointmentService().edit(uow=uow, pk=appointment_id, data=appointment_data)
     return appointment
