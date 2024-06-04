@@ -1,10 +1,13 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqladmin import Admin, ModelView
+from sqladmin import Admin
 from starlette.staticfiles import StaticFiles
 
-from src.adapters.models import User
+from src.admin.appointment import AppointmentAdmin
+from src.admin.schedule_slot import ScheduleSlotAdmin
+from src.admin.specialists import SpecialistAdmin, SpecialistRatingAdmin
+from src.admin.user import UserAdmin
 from src.db.db import engine
 from src.endpoints.auth import auth_router
 from src.endpoints.specialists import specialists_router
@@ -30,11 +33,10 @@ app.add_middleware(
 app.mount("/media", StaticFiles(directory="media"), name="media")
 admin = Admin(app, engine)
 
-
-class UserAdmin(ModelView, model=User):
-    column_list = [User.id, User.first_name, User.last_name, User.email]
-
-
+admin.add_view(AppointmentAdmin)
+admin.add_view(ScheduleSlotAdmin)
+admin.add_view(SpecialistAdmin)
+admin.add_view(SpecialistRatingAdmin)
 admin.add_view(UserAdmin)
 
 

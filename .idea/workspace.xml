@@ -4,21 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8b82d0ae-3061-4ce1-9900-34296bd7a3f2" name="Changes" comment="add schedule service, routes&#10;add appointment service, routes">
+    <list default="true" id="8b82d0ae-3061-4ce1-9900-34296bd7a3f2" name="Changes" comment="fixed bugs with created schedule and appointmens;&#10;full backend realisation complete">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/adapters/models/appointments.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/adapters/models/appointments.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/adapters/models/specialist.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/adapters/models/specialist.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/adapters/repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/adapters/repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/endpoints/dependencies.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/endpoints/dependencies.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/endpoints/schedule/schedule.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/endpoints/schedule/schedule.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/endpoints/specialists/specialists.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/endpoints/specialists/specialists.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/schemas/appointments.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/schemas/appointments.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/schemas/schedule.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/schemas/schedule.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/schemas/specialists.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/schemas/specialists.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/service/db_services/appointment_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/service/db_services/appointment_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/service/db_services/schedule_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/service/db_services/schedule_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/service/db_services/specialist_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/service/db_services/specialist_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -230,7 +218,7 @@
       <workItem from="1717344059264" duration="17000" />
       <workItem from="1717404678735" duration="18629000" />
       <workItem from="1717449795622" duration="4890000" />
-      <workItem from="1717480550768" duration="10054000" />
+      <workItem from="1717480550768" duration="13748000" />
     </task>
     <task id="LOCAL-00001" summary="init project with docker, frontend, nginx, poetry">
       <option name="closed" value="true" />
@@ -304,7 +292,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717431888530</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="fixed bugs with created schedule and appointmens;&#10;full backend realisation complete">
+      <option name="closed" value="true" />
+      <created>1717508482506</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1717508482506</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -322,10 +318,11 @@
     <MESSAGE value="add token, auth and jwt services" />
     <MESSAGE value="add login, auth, specialists routes" />
     <MESSAGE value="add schedule service, routes&#10;add appointment service, routes" />
-    <option name="LAST_COMMIT_MESSAGE" value="add schedule service, routes&#10;add appointment service, routes" />
+    <MESSAGE value="fixed bugs with created schedule and appointmens;&#10;full backend realisation complete" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed bugs with created schedule and appointmens;&#10;full backend realisation complete" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/anotherFastAPI$main.coverage" NAME="main Coverage Results" MODIFIED="1717508053461" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
+    <SUITE FILE_PATH="coverage/anotherFastAPI$main.coverage" NAME="main Coverage Results" MODIFIED="1717509041374" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
     <SUITE FILE_PATH="coverage/anotherFastAPI$jwt_auth.coverage" NAME="jwt_auth Coverage Results" MODIFIED="1717074052879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/src/service/auth_service" />
     <SUITE FILE_PATH="coverage/anotherFastAPI$anotherFastAPI.coverage" NAME="anotherFastAPI Coverage Results" MODIFIED="1717450195908" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/anotherFastAPI$config.coverage" NAME="config Coverage Results" MODIFIED="1717070740505" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
