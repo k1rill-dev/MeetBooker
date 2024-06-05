@@ -2,7 +2,7 @@ import uuid
 from uuid import UUID
 
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.adapters.models import Base
 from src.schemas.appointments import AppointmentSchema
@@ -16,6 +16,13 @@ class Appointment(Base):
     specialist_id: Mapped[UUID] = mapped_column(ForeignKey('specialists.id'))
     slot_id: Mapped[UUID] = mapped_column(ForeignKey('schedule_slots.id'))
     is_confirmed: Mapped[bool]
+
+    user = relationship("User", foreign_keys=[user_id], backref="appointments", lazy="selectin")
+    specialist = relationship("Specialist", foreign_keys=[specialist_id], backref="appointments", lazy="selectin")
+    slot = relationship("ScheduleSlot", foreign_keys=[slot_id], backref="appointments", lazy="selectin")
+
+    def __str__(self):
+        return str(self.user)
 
     def to_read_model(self) -> AppointmentSchema:
         return AppointmentSchema(

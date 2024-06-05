@@ -18,6 +18,9 @@ class User(Base):
     is_superuser: Mapped[bool] = mapped_column(default=False)
     profile_picture: Mapped[Optional[str]]
 
+    def __str__(self):
+        return self.email
+
     def to_read_model(self) -> UserSchema:
         return UserSchema(
             id=self.id,

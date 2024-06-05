@@ -17,3 +17,5 @@ class UserAdmin(ModelView, model=User):
     }
     column_searchable_list = [User.email, User.first_name, User.last_name]
     column_filters = [User.is_active, User.is_superuser]
+    form_columns = [User.email, User.first_name, User.last_name, User.is_active, User.is_superuser,
+                    User.profile_picture]

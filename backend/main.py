@@ -8,7 +8,7 @@ from src.admin.appointment import AppointmentAdmin
 from src.admin.schedule_slot import ScheduleSlotAdmin
 from src.admin.specialists import SpecialistAdmin, SpecialistRatingAdmin
 from src.admin.user import UserAdmin
-from src.db.db import engine
+from src.db.db import engine, async_session_maker
 from src.endpoints.auth import auth_router
 from src.endpoints.specialists import specialists_router
 from src.endpoints.schedule import schedule_routes
@@ -31,6 +31,7 @@ app.add_middleware(
 )
 
 app.mount("/media", StaticFiles(directory="media"), name="media")
+
 admin = Admin(app, engine)
 
 admin.add_view(AppointmentAdmin)

@@ -3,7 +3,7 @@ from datetime import datetime
 from uuid import UUID
 
 from sqlalchemy import DateTime, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.adapters.models import Base
 from src.schemas.schedule import ScheduleSchema
@@ -17,6 +17,11 @@ class ScheduleSlot(Base):
     start_time: Mapped[datetime] = mapped_column(DateTime)
     end_time: Mapped[datetime] = mapped_column(DateTime)
     is_booked: Mapped[bool]
+
+    specialist = relationship("Specialist", foreign_keys=[specialist_id], backref="schedule_slots", lazy="selectin")
+
+    def __str__(self):
+        return str(str(self.start_time) + "-" + str(self.end_time))
 
     def to_read_model(self) -> ScheduleSchema:
         return ScheduleSchema(
