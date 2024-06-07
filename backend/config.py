@@ -16,9 +16,12 @@ class Settings(BaseSettings):
     refresh_token_expires_days: int = os.getenv('REFRESH_TOKEN_EXPIRE_DAYS', default=30)
     jwt_algorithm: str = os.getenv('JWT_ALGORITHM', default='RS256')
     path_to_media: pathlib.Path = BASE_DIR.joinpath('backend/media/')
-    yandex_client_id: str
-    yandex_client_secret: str
-    yandex_redirect_uri: str
+    yandex_client_id: str = os.getenv('YANDEX_CLIENT_ID')
+    yandex_client_secret: str = os.getenv('YANDEX_CLIENT_SECRET')
+    yandex_redirect_uri: str = os.getenv('YANDEX_REDIRECT_URI')
+    vk_client_id: str = os.getenv('VK_CLIENT_ID')
+    vk_client_secret: str = os.getenv('VK_CLIENT_SECRET')
+    vk_redirect_uri: str = os.getenv('VK_REDIRECT_URI')
 
 
 settings = Settings()

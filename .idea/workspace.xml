@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8b82d0ae-3061-4ce1-9900-34296bd7a3f2" name="Changes" comment="add relationship fields to my models, revork admin panel with this changes in models">
+    <list default="true" id="8b82d0ae-3061-4ce1-9900-34296bd7a3f2" name="Changes" comment="add social auth classes">
+      <change afterPath="$PROJECT_DIR$/backend/src/endpoints/social_auth/yandex_auth.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/endpoints/social_auth/auth.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,7 +230,7 @@
       <workItem from="1717480550768" duration="15533000" />
       <workItem from="1717591526295" duration="11939000" />
       <workItem from="1717669674386" duration="6075000" />
-      <workItem from="1717763941529" duration="1415000" />
+      <workItem from="1717763941529" duration="2854000" />
     </task>
     <task id="LOCAL-00001" summary="init project with docker, frontend, nginx, poetry">
       <option name="closed" value="true" />
@@ -325,7 +328,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717604375911</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="add social auth classes">
+      <option name="closed" value="true" />
+      <created>1717765775697</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1717765775697</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -357,10 +368,11 @@
     <MESSAGE value="fixed bugs with created schedule and appointmens;&#10;full backend realisation complete" />
     <MESSAGE value="add admin panel via sqladmin" />
     <MESSAGE value="add relationship fields to my models, revork admin panel with this changes in models" />
-    <option name="LAST_COMMIT_MESSAGE" value="add relationship fields to my models, revork admin panel with this changes in models" />
+    <MESSAGE value="add social auth classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="add social auth classes" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/anotherFastAPI$main.coverage" NAME="main Coverage Results" MODIFIED="1717604187108" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
+    <SUITE FILE_PATH="coverage/anotherFastAPI$main.coverage" NAME="main Coverage Results" MODIFIED="1717766238757" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
     <SUITE FILE_PATH="coverage/anotherFastAPI$jwt_auth.coverage" NAME="jwt_auth Coverage Results" MODIFIED="1717074052879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/src/service/auth_service" />
     <SUITE FILE_PATH="coverage/anotherFastAPI$anotherFastAPI.coverage" NAME="anotherFastAPI Coverage Results" MODIFIED="1717450195908" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/anotherFastAPI$config.coverage" NAME="config Coverage Results" MODIFIED="1717070740505" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
