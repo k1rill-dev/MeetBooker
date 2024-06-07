@@ -4,19 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8b82d0ae-3061-4ce1-9900-34296bd7a3f2" name="Changes" comment="add admin panel via sqladmin">
+    <list default="true" id="8b82d0ae-3061-4ce1-9900-34296bd7a3f2" name="Changes" comment="add relationship fields to my models, revork admin panel with this changes in models">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/backend/poetry.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/adapters/models/appointments.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/adapters/models/appointments.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/adapters/models/schedule_slots.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/adapters/models/schedule_slots.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/adapters/models/specialist.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/adapters/models/specialist.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/adapters/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/adapters/models/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/admin/appointment.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/admin/appointment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/admin/schedule_slot.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/admin/schedule_slot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/admin/specialists.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/admin/specialists.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/admin/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/admin/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +23,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -63,7 +58,7 @@
     &quot;Python.jwt_auth.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/yandex-oauth&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/PythonProjects/anotherFastAPI/backend/main.py&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -76,6 +71,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\PythonProjects\anotherFastAPI\backend\src\service" />
       <recent name="D:\PythonProjects\anotherFastAPI\backend\src\service\db_services" />
       <recent name="D:\PythonProjects\anotherFastAPI\backend" />
       <recent name="D:\PythonProjects\anotherFastAPI" />
@@ -229,7 +225,9 @@
       <workItem from="1717404678735" duration="18629000" />
       <workItem from="1717449795622" duration="4890000" />
       <workItem from="1717480550768" duration="15533000" />
-      <workItem from="1717591526295" duration="11853000" />
+      <workItem from="1717591526295" duration="11939000" />
+      <workItem from="1717669674386" duration="6075000" />
+      <workItem from="1717763941529" duration="1415000" />
     </task>
     <task id="LOCAL-00001" summary="init project with docker, frontend, nginx, poetry">
       <option name="closed" value="true" />
@@ -319,7 +317,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717519162921</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="add relationship fields to my models, revork admin panel with this changes in models">
+      <option name="closed" value="true" />
+      <created>1717604375911</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1717604375911</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -327,6 +333,17 @@
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.conf" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init project with docker, frontend, nginx, poetry" />
@@ -339,7 +356,8 @@
     <MESSAGE value="add schedule service, routes&#10;add appointment service, routes" />
     <MESSAGE value="fixed bugs with created schedule and appointmens;&#10;full backend realisation complete" />
     <MESSAGE value="add admin panel via sqladmin" />
-    <option name="LAST_COMMIT_MESSAGE" value="add admin panel via sqladmin" />
+    <MESSAGE value="add relationship fields to my models, revork admin panel with this changes in models" />
+    <option name="LAST_COMMIT_MESSAGE" value="add relationship fields to my models, revork admin panel with this changes in models" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/anotherFastAPI$main.coverage" NAME="main Coverage Results" MODIFIED="1717604187108" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
