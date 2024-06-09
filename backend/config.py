@@ -5,8 +5,7 @@ from pydantic_settings import BaseSettings
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 
-load_dotenv(str(BASE_DIR / '.env'))
-
+load_dotenv(str(BASE_DIR / 'backend/.env'))
 
 class Settings(BaseSettings):
     db_url: str = os.getenv('DATABASE_URL', default='postgresql+asyncpg://postgres:lolkek123@localhost:5432/postgres')
@@ -19,9 +18,9 @@ class Settings(BaseSettings):
     yandex_client_id: str = os.getenv('YANDEX_CLIENT_ID')
     yandex_client_secret: str = os.getenv('YANDEX_CLIENT_SECRET')
     yandex_redirect_uri: str = os.getenv('YANDEX_REDIRECT_URI')
-    vk_client_id: str = os.getenv('VK_CLIENT_ID')
-    vk_client_secret: str = os.getenv('VK_CLIENT_SECRET')
-    vk_redirect_uri: str = os.getenv('VK_REDIRECT_URI')
+    # vk_client_id: str = os.getenv('VK_CLIENT_ID')
+    # vk_client_secret: str = os.getenv('VK_CLIENT_SECRET')
+    # vk_redirect_uri: str = os.getenv('VK_REDIRECT_URI')
 
 
 settings = Settings()

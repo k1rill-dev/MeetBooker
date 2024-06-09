@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter
+from starlette.responses import Response
 
 from config import settings
+from src.endpoints.dependencies import UnitOfWorkDependency
 from src.service.social_auth.yandex_auth import YandexAuth
 
 social_auth_router = APIRouter(tags=['yandex social authentication'])
@@ -14,7 +16,6 @@ async def login_yandex():
 
 
 @social_auth_router.get("/auth/yandex/callback")
-async def yandex_callback(code: str):
+async def yandex_callback(code: str, uow: UnitOfWorkDependency, response: Response):
     token_response = await yandex_auth.get_access_token(code)
-    user_info = await yandex_auth.get_user_info(token_response.get('access_token'))
-    return user_info
+    await yandex_auth.register(uow=uow, token=token_response.get("access_token"), response=response)

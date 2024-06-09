@@ -8,9 +8,8 @@ from src.admin.appointment import AppointmentAdmin
 from src.admin.schedule_slot import ScheduleSlotAdmin
 from src.admin.specialists import SpecialistAdmin, SpecialistRatingAdmin
 from src.admin.user import UserAdmin
-from src.db.db import engine, async_session_maker
+from src.db.db import engine
 from src.endpoints.auth import auth_router
-from src.endpoints.social_auth.vk_auth import vk_router
 from src.endpoints.social_auth.yandex_auth import social_auth_router
 from src.endpoints.specialists import specialists_router
 from src.endpoints.schedule import schedule_routes
