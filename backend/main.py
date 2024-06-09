@@ -8,8 +8,9 @@ from src.admin.appointment import AppointmentAdmin
 from src.admin.schedule_slot import ScheduleSlotAdmin
 from src.admin.specialists import SpecialistAdmin, SpecialistRatingAdmin
 from src.admin.user import UserAdmin
-from src.db.db import engine, async_session_maker
+from src.db.db import engine
 from src.endpoints.auth import auth_router
+from src.endpoints.social_auth.yandex_auth import social_auth_router
 from src.endpoints.specialists import specialists_router
 from src.endpoints.schedule import schedule_routes
 
@@ -49,6 +50,8 @@ async def root():
 app.include_router(auth_router, prefix="/api")
 app.include_router(specialists_router, prefix="/api")
 app.include_router(schedule_routes, prefix="/api")
+app.include_router(social_auth_router, prefix="/api")
+# app.include_router(vk_router, prefix="/api") АВТОРИЗАЦИЯ ВК НЕ РАБОТАЕТ, ТАК КАК НУЖЕН ПРОТОКОЛ HTTPS
 
 if __name__ == "__main__":
     uvicorn.run('main:app', host='localhost', port=8000, reload=True)
