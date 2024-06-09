@@ -1,26 +1,45 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import MainPage from './components/Pages/MainPage';
+import LogoutForm from './components/Forms/LogoutForm';
+import RegistrationForm from './components/Forms/RegistrationForm';
+import LoginForm from './components/Forms/LoginForm';
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={(
+                    <div>
+                        {/*<Header></Header>*/}
+                        {/*<div className="mt-4"></div>*/}
+                        <MainPage></MainPage>
+                        {/*<Footer></Footer>*/}
+                    </div>
+                )}>
+                </Route>
+                <Route path="/logout" element={(
+                    <div>
+                        <LogoutForm></LogoutForm>
+                    </div>
+                )}>
+                </Route>
+                <Route path="/register" element={(
+                    <div>
+                        <RegistrationForm></RegistrationForm>
+                    </div>
+                )}>
+                </Route>
+                <Route path="/login" element={(
+                    <div>
+                        <LoginForm></LoginForm>
+                    </div>
+                )}>
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
