@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8b82d0ae-3061-4ce1-9900-34296bd7a3f2" name="Changes" comment="add admin panel via sqladmin">
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
+    <list default="true" id="8b82d0ae-3061-4ce1-9900-34296bd7a3f2" name="Changes" comment="add login, registration and logout forms">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,6 +19,7 @@
         <option value="FastAPI main" />
         <option value="FastAPI test_main" />
         <option value="Python Script" />
+        <option value="JSX File" />
       </list>
     </option>
   </component>
@@ -230,6 +228,7 @@
       <workItem from="1717449795622" duration="4890000" />
       <workItem from="1717480550768" duration="15533000" />
       <workItem from="1717591526295" duration="11853000" />
+      <workItem from="1718020220561" duration="6295000" />
     </task>
     <task id="LOCAL-00001" summary="init project with docker, frontend, nginx, poetry">
       <option name="closed" value="true" />
@@ -319,7 +318,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717519162921</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="add login, registration and logout forms">
+      <option name="closed" value="true" />
+      <created>1717938172427</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1717938172427</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -327,6 +334,17 @@
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.conf" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init project with docker, frontend, nginx, poetry" />
@@ -339,7 +357,8 @@
     <MESSAGE value="add schedule service, routes&#10;add appointment service, routes" />
     <MESSAGE value="fixed bugs with created schedule and appointmens;&#10;full backend realisation complete" />
     <MESSAGE value="add admin panel via sqladmin" />
-    <option name="LAST_COMMIT_MESSAGE" value="add admin panel via sqladmin" />
+    <MESSAGE value="add login, registration and logout forms" />
+    <option name="LAST_COMMIT_MESSAGE" value="add login, registration and logout forms" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/anotherFastAPI$main.coverage" NAME="main Coverage Results" MODIFIED="1717933356071" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
