@@ -4,6 +4,10 @@ import MainPage from './components/Pages/MainPage';
 import LogoutForm from './components/Forms/LogoutForm';
 import RegistrationForm from './components/Forms/RegistrationForm';
 import LoginForm from './components/Forms/LoginForm';
+import UserProfile from "./components/Pages/UserProfile";
+import Specialists from "./components/Pages/Specialists";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 
 
 function App() {
@@ -12,10 +16,25 @@ function App() {
             <Routes>
                 <Route path="/" element={(
                     <div>
-                        {/*<Header></Header>*/}
-                        {/*<div className="mt-4"></div>*/}
                         <MainPage></MainPage>
-                        {/*<Footer></Footer>*/}
+                    </div>
+                )}>
+                </Route>
+                <Route path="/profile" element={(
+                    <div>
+                        <Header></Header>
+                        <div className="mt-4"></div>
+                        <UserProfile></UserProfile>
+                        <Footer></Footer>
+                    </div>
+                )}>
+                </Route>
+                <Route path="/specialists" element={(
+                    <div>
+                        <Header></Header>
+                        <div className="mt-4"></div>
+                        <Specialists></Specialists>
+                        <Footer></Footer>
                     </div>
                 )}>
                 </Route>
