@@ -9,6 +9,7 @@ import Specialists from "./components/Pages/Specialists";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import SpecialistProfile from "./components/Pages/SpecialistProfile";
+import SpecInfo from "./components/Pages/SpecInfo";
 
 
 function App() {
@@ -26,6 +27,15 @@ function App() {
                         <Header></Header>
                         <div className="mt-4"></div>
                         <UserProfile></UserProfile>
+                        <Footer></Footer>
+                    </div>
+                )}>
+                </Route>
+                <Route path="/spec-profile" element={(
+                    <div>
+                        <Header></Header>
+                        <div className="mt-4"></div>
+                        <SpecInfo></SpecInfo>
                         <Footer></Footer>
                     </div>
                 )}>

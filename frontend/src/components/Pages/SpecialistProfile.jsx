@@ -1,9 +1,12 @@
+// SpecialistProfile.js
+
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { Button } from 'flowbite-react';
 import './SpecialistProfile.css';
+import SpecialistCard from "../Cards/SpecialistCard";
 
 Modal.setAppElement('#root');
 
@@ -66,6 +69,7 @@ const SpecialistProfile = () => {
     return (
         <div className="container mx-auto">
             <div className="grid md:grid-cols-2 gap-8 p-6 bg-gray-100 rounded-lg shadow-lg">
+                {/* Left Side */}
                 <div className="p-6 border-b md:border-b-0 md:border-r border-gray-200">
                     <img
                         src="https://via.placeholder.com/150"
@@ -74,8 +78,6 @@ const SpecialistProfile = () => {
                     />
                     <h2 className="text-3xl font-bold mb-2 text-center">Иван Иванов</h2>
                     <p className="text-lg text-gray-700 mb-4 text-center">Специалист по программированию</p>
-                </div>
-                <div className="p-6 flex flex-col justify-between">
                     <p className="text-gray-700 mb-4">
                         Иван Иванов - специалист с многолетним опытом в программировании. Занимается разработкой
                         веб-приложений, баз данных и многим другим.
@@ -143,6 +145,21 @@ const SpecialistProfile = () => {
                             </div>
                         </div>
                     </Modal>
+                </div>
+
+                {/* Right Side - Specialist Cards */}
+                <div className="p-6">
+                    <SpecialistCard
+                        name="Петр Петров"
+                        expertise="Специалист по дизайну"
+                        description="Петр Петров имеет большой опыт в создании креативных и функциональных дизайнов для веб-приложений."
+                    />
+                    <SpecialistCard
+                        name="Мария Сидорова"
+                        expertise="Специалист по UX/UI"
+                        description="Мария Сидорова специализируется на создании интуитивно понятных пользовательских интерфейсов."
+                    />
+                    {/* Add more SpecialistCard components as needed */}
                 </div>
             </div>
         </div>
