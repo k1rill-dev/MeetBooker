@@ -11,7 +11,7 @@ from src.service.unit_of_work.unit_of_work import IUnitOfWork
 
 
 class SpecialistService(AbstractService):
-    async def add(self, uow: IUnitOfWork, data: CreateSpecialistSchema) -> PrimaryKey:
+    async def add(self, uow: IUnitOfWork, data: SpecialistSchema) -> PrimaryKey:
         async with uow:
             spec = await uow.specialist.add_one(data=data.model_dump())
             await uow.commit()

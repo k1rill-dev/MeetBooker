@@ -7,7 +7,7 @@ from src.service.unit_of_work.unit_of_work import IUnitOfWork
 
 
 class ScheduleService(AbstractService):
-    async def add(self, uow: IUnitOfWork, data: CreateScheduleSchema):
+    async def add(self, uow: IUnitOfWork, data: ScheduleSchema):
         async with uow:
             res = await uow.schedule_slots.add_one(data=data.model_dump())
             await uow.commit()

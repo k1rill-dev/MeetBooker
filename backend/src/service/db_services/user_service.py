@@ -1,3 +1,4 @@
+import uuid
 from typing import Any, Optional
 from uuid import UUID
 from fastapi import HTTPException
@@ -10,7 +11,7 @@ from src.service.unit_of_work.unit_of_work import IUnitOfWork
 
 
 class UserService(AbstractService):
-    async def add(self, uow: IUnitOfWork, data: AddUserSchema) -> UUID | None:
+    async def add(self, uow: IUnitOfWork, data: UserSchema) -> UUID | None:
         data.password = Hasher.hash_password(data.password).decode('utf-8')
         data.email = data.email.email
         user = data.model_dump()

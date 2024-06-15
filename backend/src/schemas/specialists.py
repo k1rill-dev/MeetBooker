@@ -1,7 +1,8 @@
+import uuid
 from typing import Optional
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class BaseSpecialistSchema(BaseModel):
@@ -14,7 +15,7 @@ class BaseSpecialistSchema(BaseModel):
 
 
 class SpecialistSchema(BaseSpecialistSchema):
-    id: UUID
+    id: UUID = Field(default_factory=uuid.uuid4)
 
 
 class CreateSpecialistSchema(BaseSpecialistSchema):

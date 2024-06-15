@@ -11,7 +11,7 @@ from src.schemas.appointments import AppointmentSchema
 class Appointment(Base):
     __tablename__ = 'appointments'
 
-    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     user_id: Mapped[UUID] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'))
     specialist_id: Mapped[UUID] = mapped_column(ForeignKey('specialists.id', ondelete='CASCADE'))
     slot_id: Mapped[UUID] = mapped_column(ForeignKey('schedule_slots.id', ondelete='CASCADE'))

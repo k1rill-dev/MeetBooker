@@ -1,11 +1,12 @@
+import uuid
 from typing import Optional
 from uuid import UUID
 
-from pydantic import BaseModel, NameEmail
+from pydantic import BaseModel, NameEmail, Field
 
 
 class UserSchema(BaseModel):
-    id: UUID
+    id: UUID = Field(default_factory=uuid.uuid4)
     email: NameEmail
     password: str
     first_name: str

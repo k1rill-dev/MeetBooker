@@ -9,7 +9,7 @@ from src.schemas.user import UserSchema
 class User(Base):
     __tablename__ = 'users'
 
-    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     email: Mapped[str] = mapped_column(index=True, unique=True)
     password: Mapped[str]
     first_name: Mapped[str]

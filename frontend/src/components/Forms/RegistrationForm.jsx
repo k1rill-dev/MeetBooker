@@ -1,6 +1,29 @@
 import React from 'react';
 import SpecialistRegistration from "./SpecialistRegistration";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import {BACKEND_API_URL} from "../../api";
 
+
+const register = async (user) => {
+    const {data, status} = await axios.post(BACKEND_API_URL+ "/api/register", user, {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true
+    });
+    return data
+}
+
+const addSpecialist = async (specData) => {
+    const {data, status} = await axios.post(BACKEND_API_URL + "/api/specialist", specData, {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true
+    });
+    return data
+}
 
 const steps = ['A', 'B']
 
@@ -16,6 +39,7 @@ const RegistrationForm = () => {
     const [userId, setUserId] = React.useState('');
     const [speciality, setSpeciality] = React.useState('');
     const [bio, setBio] = React.useState('');
+    const nav = useNavigate();
     const handleEmailChange = (event) => {
         if ((!event.target.value) || !(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(event.target.value))) {
             setErrorMessage("Неправильный формат email!")
@@ -63,25 +87,34 @@ const RegistrationForm = () => {
         }
         setCurrentStepIndex(currentStepIndex - 1);
     }
-    const handleSendUserData = () => {
-        console.log({
+    const handleSendUserData = async (event) => {
+        event.preventDefault()
+        let sendData = {
             first_name: firstName,
             last_name: lastName,
             email: email,
             password: password,
             is_active: true,
             is_superuser: false
-        })
+        }
+        let response = await register(sendData);
+        setUserId(response.res)
         if (isSpecialist) {
             handleNextStep();
         }
+        else{
+            nav('/login')
+        }
     }
-    const handleSendSpecialistData = () => {
-        console.log({
+    const handleSendSpecialistData = async (event) => {
+        event.preventDefault()
+        let sendData = {
             speciality: speciality,
             bio: bio,
             user_id: userId
-        })
+        }
+        let response = await addSpecialist(sendData);
+        nav('/login')
     }
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-400">
@@ -181,7 +214,7 @@ const RegistrationForm = () => {
                     <div className="text-red-500 text-sm font-medium">{errorMessage}</div>
                 )}
                 <div className="mt-4 text-center">
-                    <p className="text-sm text-gray-600">Уже есть аккаунт? <a href="#"
+                    <p className="text-sm text-gray-600">Уже есть аккаунт? <a href="/login"
                                                                               className="font-medium text-indigo-600 hover:text-indigo-500">Войдите</a>
                     </p>
                 </div>

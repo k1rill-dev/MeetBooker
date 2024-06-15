@@ -1,6 +1,7 @@
+import uuid
 from typing import Optional
 from uuid import UUID
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class AppointmentBase(BaseModel):
@@ -14,7 +15,7 @@ class AppointmentBase(BaseModel):
 
 
 class AppointmentSchema(AppointmentBase):
-    id: UUID
+    id: UUID = Field(default_factory=uuid.uuid4)
 
 
 class CreateAppointmentSchema(AppointmentBase):

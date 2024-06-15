@@ -1,24 +1,36 @@
 import React, {useState} from 'react';
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import {BACKEND_API_URL} from "../../api";
+
+const login = async (sendData) => {
+    const {data, status} = await axios.post(BACKEND_API_URL +'/api/login', sendData, {
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+        },
+        withCredentials: true
+    });
+    return data;
+
+}
 
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const nav = useNavigate();
     const handleYandexLogin = () => {
         window.location.href = 'https://oauth.yandex.ru/authorize?response_type=code&client_id=ВАШ_CLIENT_ID';
     };
-    const handleLogin = async () => {
+    const handleLogin = async (event) => {
+        event.preventDefault();
         let sendData = {
             email: email,
             password: password
         }
-        const {data, error} = await axios.post('/api/login', sendData, {
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-        });
-        console.log(data)
+        let data = await login(sendData).then(res => res);
+        localStorage.setItem('data', JSON.stringify(data));
+        nav('/')
     }
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-400">

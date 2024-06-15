@@ -1,8 +1,9 @@
+import uuid
 from typing import Optional
 from uuid import UUID
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class BaseScheduleSchema(BaseModel):
@@ -16,7 +17,7 @@ class BaseScheduleSchema(BaseModel):
 
 
 class ScheduleSchema(BaseScheduleSchema):
-    id: UUID
+    id: UUID = Field(default_factory=uuid.uuid4)
 
 
 class CreateScheduleSchema(BaseScheduleSchema):

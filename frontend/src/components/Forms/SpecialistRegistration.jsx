@@ -4,7 +4,7 @@ import {Textarea} from "flowbite-react";
 const SpecialistRegistration = ({handlePreviousStep, userId, setSpeciality, setBio, handleSendSpecialistData}) => {
     return (
         <>
-            <form onSubmit={() => handleSendSpecialistData()} className="space-y-4">
+            <form onSubmit={(event) => handleSendSpecialistData(event)} className="space-y-4">
                 <div>
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="speciality">
                         Специальность
