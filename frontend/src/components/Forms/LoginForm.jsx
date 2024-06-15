@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {BACKEND_API_URL} from "../../api";
+import {handleYandexLogin} from "../../tools/yandex";
 
 const login = async (sendData) => {
-    const {data, status} = await axios.post(BACKEND_API_URL +'/api/login', sendData, {
+    const {data, status} = await axios.post(BACKEND_API_URL + '/api/login', sendData, {
         headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json'
@@ -19,9 +20,6 @@ const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const nav = useNavigate();
-    const handleYandexLogin = () => {
-        window.location.href = 'https://oauth.yandex.ru/authorize?response_type=code&client_id=ВАШ_CLIENT_ID';
-    };
     const handleLogin = async (event) => {
         event.preventDefault();
         let sendData = {
@@ -78,7 +76,7 @@ const LoginForm = () => {
                 </div>
                 <div className="mt-6 text-center">
                     <button
-                        onClick={handleYandexLogin}
+                        onClick={() => handleYandexLogin()}
                         className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
                         Войти через Яндекс

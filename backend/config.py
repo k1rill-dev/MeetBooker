@@ -7,6 +7,7 @@ BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 
 load_dotenv(str(BASE_DIR / 'backend/.env'))
 
+
 class Settings(BaseSettings):
     db_url: str = os.getenv('DATABASE_URL', default='postgresql+asyncpg://postgres:lolkek123@localhost:5432/postgres')
     private_key: str = BASE_DIR.joinpath('backend/src/certs/jwt-private.pem').read_text()
@@ -18,6 +19,7 @@ class Settings(BaseSettings):
     yandex_client_id: str = os.getenv('YANDEX_CLIENT_ID')
     yandex_client_secret: str = os.getenv('YANDEX_CLIENT_SECRET')
     yandex_redirect_uri: str = os.getenv('YANDEX_REDIRECT_URI')
+    frontend_url: str = os.getenv('FRONTEND_URL')
     # vk_client_id: str = os.getenv('VK_CLIENT_ID')
     # vk_client_secret: str = os.getenv('VK_CLIENT_SECRET')
     # vk_redirect_uri: str = os.getenv('VK_REDIRECT_URI')

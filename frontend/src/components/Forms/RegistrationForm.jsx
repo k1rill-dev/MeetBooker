@@ -3,10 +3,11 @@ import SpecialistRegistration from "./SpecialistRegistration";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {BACKEND_API_URL} from "../../api";
+import {handleYandexLogin} from "../../tools/yandex";
 
 
 const register = async (user) => {
-    const {data, status} = await axios.post(BACKEND_API_URL+ "/api/register", user, {
+    const {data, status} = await axios.post(BACKEND_API_URL + "/api/register", user, {
         headers: {
             'Content-Type': 'application/json'
         },
@@ -75,9 +76,6 @@ const RegistrationForm = () => {
         setLastName(event.target.value);
 
     }
-    const handleYandexLogin = () => {
-        window.location.href = 'https://oauth.yandex.ru/authorize?response_type=code&client_id=ВАШ_CLIENT_ID';
-    };
     const handleNextStep = () => {
         setCurrentStepIndex(currentStepIndex + 1);
     }
@@ -101,8 +99,7 @@ const RegistrationForm = () => {
         setUserId(response.res)
         if (isSpecialist) {
             handleNextStep();
-        }
-        else{
+        } else {
             nav('/login')
         }
     }

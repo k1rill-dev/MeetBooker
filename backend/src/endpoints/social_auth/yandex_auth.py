@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from starlette.responses import Response
+from starlette.responses import Response, RedirectResponse
 
 from config import settings
 from src.endpoints.dependencies import UnitOfWorkDependency
@@ -16,6 +16,8 @@ async def login_yandex():
 
 
 @social_auth_router.get("/auth/yandex/callback")
-async def yandex_callback(code: str, uow: UnitOfWorkDependency, response: Response):
+async def yandex_callback(code: str, uow: UnitOfWorkDependency):
     token_response = await yandex_auth.get_access_token(code)
+    response = RedirectResponse(settings.frontend_url)
     await yandex_auth.register(uow=uow, token=token_response.get("access_token"), response=response)
+    return response

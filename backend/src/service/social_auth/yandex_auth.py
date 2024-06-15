@@ -1,6 +1,8 @@
 import httpx
 from starlette.responses import Response
-from fastapi import HTTPException
+from fastapi import HTTPException, Request
+
+from config import settings
 from src.schemas.user import AddUserSchema, LoginUserSchema, UserSchema
 from src.service.auth_service.auth_service import AuthService
 from src.service.auth_service.jwt_auth import JWTAuth
@@ -42,7 +44,7 @@ class YandexAuth(BaseSocialAuth):
         :return: None
         """
         user_info = await self.get_user_info(token)
-        user_schema = AddUserSchema(
+        user_schema = UserSchema(
             email=user_info['default_email'],
             password='social',
             first_name=user_info['first_name'],
