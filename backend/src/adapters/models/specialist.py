@@ -12,9 +12,10 @@ class Specialist(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
     speciality: Mapped[str] = mapped_column(String(100))
     bio: Mapped[str] = mapped_column(String(255))
-    user_id: Mapped[UUID] = mapped_column(ForeignKey('users.id'), unique=True)
+    user_id: Mapped[UUID] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'), unique=True)
 
-    user = relationship("User", foreign_keys=[user_id], backref="specialists", lazy="joined")
+    user = relationship("User", foreign_keys=[user_id], backref="specialists", lazy="joined",
+                        cascade="all, delete")
 
     def __str__(self):
         return self.speciality

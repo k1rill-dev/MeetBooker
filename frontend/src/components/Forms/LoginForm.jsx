@@ -1,20 +1,36 @@
-import React from 'react';
+import React, {useState} from 'react';
+import axios from "axios";
 
 const LoginForm = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const handleYandexLogin = () => {
         window.location.href = 'https://oauth.yandex.ru/authorize?response_type=code&client_id=ВАШ_CLIENT_ID';
     };
-
+    const handleLogin = async () => {
+        let sendData = {
+            email: email,
+            password: password
+        }
+        const {data, error} = await axios.post('/api/login', sendData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
+        console.log(data)
+    }
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-400">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
                 <h2 className="text-3xl font-bold mb-6 text-gray-900 text-center">Войти</h2>
-                <form className="space-y-4">
+                <form onSubmit={handleLogin} className="space-y-4">
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                             Email
                         </label>
                         <input
+                            onChange={(event) => setEmail(event.target.value)}
                             type="email"
                             id="email"
                             placeholder="Введите ваш email"
@@ -26,6 +42,7 @@ const LoginForm = () => {
                             Пароль
                         </label>
                         <input
+                            onChange={(event) => setPassword(event.target.value)}
                             type="password"
                             id="password"
                             placeholder="Введите ваш пароль"

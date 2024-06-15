@@ -12,14 +12,17 @@ class Appointment(Base):
     __tablename__ = 'appointments'
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
-    user_id: Mapped[UUID] = mapped_column(ForeignKey('users.id'))
-    specialist_id: Mapped[UUID] = mapped_column(ForeignKey('specialists.id'))
-    slot_id: Mapped[UUID] = mapped_column(ForeignKey('schedule_slots.id'))
+    user_id: Mapped[UUID] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'))
+    specialist_id: Mapped[UUID] = mapped_column(ForeignKey('specialists.id', ondelete='CASCADE'))
+    slot_id: Mapped[UUID] = mapped_column(ForeignKey('schedule_slots.id', ondelete='CASCADE'))
     is_confirmed: Mapped[bool]
 
-    user = relationship("User", foreign_keys=[user_id], backref="appointments", lazy="selectin")
-    specialist = relationship("Specialist", foreign_keys=[specialist_id], backref="appointments", lazy="selectin")
-    slot = relationship("ScheduleSlot", foreign_keys=[slot_id], backref="appointments", lazy="selectin")
+    user = relationship("User", foreign_keys=[user_id], backref="appointments", lazy="selectin",
+                        cascade="all, delete")
+    specialist = relationship("Specialist", foreign_keys=[specialist_id], backref="appointments", lazy="selectin",
+                        cascade="all, delete")
+    slot = relationship("ScheduleSlot", foreign_keys=[slot_id], backref="appointments", lazy="selectin",
+                        cascade="all, delete")
 
     def __str__(self):
         return str(self.user)

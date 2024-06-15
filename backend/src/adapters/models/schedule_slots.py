@@ -13,12 +13,13 @@ class ScheduleSlot(Base):
     __tablename__ = 'schedule_slots'
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
-    specialist_id: Mapped[UUID] = mapped_column(ForeignKey('specialists.id'))
+    specialist_id: Mapped[UUID] = mapped_column(ForeignKey('specialists.id', ondelete='CASCADE'))
     start_time: Mapped[datetime] = mapped_column(DateTime)
     end_time: Mapped[datetime] = mapped_column(DateTime)
     is_booked: Mapped[bool]
 
-    specialist = relationship("Specialist", foreign_keys=[specialist_id], backref="schedule_slots", lazy="selectin")
+    specialist = relationship("Specialist", foreign_keys=[specialist_id], backref="schedule_slots", lazy="selectin",
+                              cascade="all, delete")
 
     def __str__(self):
         return str(str(self.start_time) + "-" + str(self.end_time))
