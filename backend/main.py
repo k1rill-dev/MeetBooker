@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_pagination import add_pagination
 from sqladmin import Admin
 from starlette.staticfiles import StaticFiles
 
@@ -41,6 +42,8 @@ admin.add_view(SpecialistAdmin)
 admin.add_view(SpecialistRatingAdmin)
 admin.add_view(UserAdmin)
 
+add_pagination(app)
+
 
 @app.get("/api")
 async def root():
@@ -51,7 +54,7 @@ app.include_router(auth_router, prefix="/api")
 app.include_router(specialists_router, prefix="/api")
 app.include_router(schedule_routes, prefix="/api")
 app.include_router(social_auth_router, prefix="/api")
-# app.include_router(vk_router, prefix="/api") АВТОРИЗАЦИЯ ВК НЕ РАБОТАЕТ, ТАК КАК НУЖЕН ПРОТОКОЛ HTTPS
+# app.include_router(vk_router, prefix="/api") АВТОРИЗАЦИЯ ВК НЕ РАБОТАЕТ, ТАК КАК НУЖЕН ПРОТОКОЛ HTTPS, NGROK ДЛЯ СЛАБЫХ ДУХОМ
 
 if __name__ == "__main__":
     uvicorn.run('main:app', host='localhost', port=8000, reload=True)

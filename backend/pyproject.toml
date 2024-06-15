@@ -21,6 +21,7 @@ python-multipart = "^0.0.9"
 aiofiles = "^23.2.1"
 sqladmin = {extras = ["full"], version = "^0.17.0"}
 fastapi-admin = "^1.0.4"
+fastapi-pagination = "^0.12.25"
 
 
 [build-system]

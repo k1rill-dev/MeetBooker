@@ -1,7 +1,6 @@
 from uuid import UUID
 from fastapi import APIRouter, Depends
-from sqlalchemy import ChunkedIteratorResult
-
+from fastapi_pagination import Page, paginate
 from src.endpoints.dependencies import UnitOfWorkDependency, get_user_from_token, get_specialist_from_token
 from src.schemas.specialists import SpecialistSchema, SpecialistRatingSchema, CreateSpecialistSchema, \
     UpdateSpecialistSchema, CreateSpecialistRatingSchema
@@ -11,9 +10,10 @@ from src.service.db_services.specialist_service import SpecialistService, Specia
 specialists_router = APIRouter(tags=["specialists"])
 
 
-@specialists_router.get("/specialist")
+@specialists_router.get("/specialist", response_model=Page[SpecialistSchema])
 async def get_all_specialists(uow: UnitOfWorkDependency):
-    return await SpecialistService().list(uow=uow)
+    data = await SpecialistService().list(uow=uow)
+    return paginate(data)
 
 
 @specialists_router.post("/specialist")
