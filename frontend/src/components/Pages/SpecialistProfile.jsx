@@ -43,6 +43,7 @@ const SpecialistProfile = () => {
         axios
             .get(`${BACKEND_API_URL}/api/specialist?page=1&size=4`)
             .then((res) => {
+                console.log(res.data.items)
                 setRightSideItems(res.data.items);
             })
             .catch((err) => console.log(err));
@@ -130,11 +131,10 @@ const SpecialistProfile = () => {
     return (
         <div className="container mx-auto">
             <div className="grid md:grid-cols-2 gap-8 p-6 bg-gray-100 rounded-lg shadow-lg">
-                {/* Left Side */}
                 <div className="p-6 border-b md:border-b-0 md:border-r border-gray-200">
                     <div className="flex flex-col items-center">
                         <img
-                            src="https://via.placeholder.com/150"
+                            src={items.profile_picture || "https://via.placeholder.com/150"}
                             alt="Иван Иванов"
                             className="w-24 h-24 rounded-full border-4 border-blue-500 mb-4"
                         />
@@ -219,7 +219,6 @@ const SpecialistProfile = () => {
                         </div>
                     </Modal>
                 </div>
-                {/* Right Side - Specialist Cards */}
                 <div className="p-6">
                     {rightSideItems.map((item, index) => (
                         <SpecialistCard
@@ -227,6 +226,8 @@ const SpecialistProfile = () => {
                             expertise={item.speciality}
                             description={item.bio}
                             rating={item.sum_rating}
+                            id={item.spec_id}
+                            picture={item.profile_picture}
                         />
                     ))}
                 </div>

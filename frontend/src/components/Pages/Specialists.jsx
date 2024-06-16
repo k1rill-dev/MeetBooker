@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from "axios";
 import api, {BACKEND_API_URL} from "../../api";
+import {Button} from "flowbite-react";
 
 const specialists = [
     {
@@ -76,6 +77,7 @@ const Specialists = () => {
                             <p className="text-sm text-gray-600">Специализация: {specialist.speciality}</p>
                             <p className="text-sm text-gray-600">{specialist.bio}</p>
                             <p className="text-sm text-gray-600">Рейтинг: {specialist.sum_rating}</p>
+                            <Button href={"/specialist/" + specialist.spec_id}>Страница специалиста</Button>
                         </div>
                     ))}
                 </div>

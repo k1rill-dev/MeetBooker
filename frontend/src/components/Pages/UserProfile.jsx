@@ -11,7 +11,6 @@ const UserProfile = () => {
     const history = useNavigate();
 
     useEffect(() => {
-        // Функция для загрузки данных пользователя
         const fetchUserData = async () => {
             try {
                 const response = await api.get('/api/', {
@@ -26,7 +25,6 @@ const UserProfile = () => {
             }
         };
 
-        // Функция для загрузки данных о бронированиях
         const fetchAppointments = async () => {
             try {
                 const response = await api.get('/api/appointment', {
@@ -35,13 +33,11 @@ const UserProfile = () => {
 
                 const currentDate = new Date();
 
-                // Фильтрация актуальных бронирований (по дате)
                 const activeBookings = response.data.filter(booking => {
                     const endTime = new Date(booking.slot_end_time);
                     return endTime >= currentDate && booking.user_first_name === user.first_name && booking.user_last_name === user.last_name && booking.is_confirmed;
                 });
 
-                // Фильтрация бронирований в истории (прошедшие по дате)
                 const historyBookings = response.data.filter(booking => {
                     const endTime = new Date(booking.slot_end_time);
                     return endTime < currentDate && booking.user_first_name === user.first_name && booking.user_last_name === user.last_name && booking.is_confirmed;
@@ -117,6 +113,12 @@ const UserProfile = () => {
                             onClick={openModal}
                         >
                             Редактировать профиль
+                        </button>
+                        <button
+                            className="ml-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            onClick={() => history('/logout')}
+                        >
+                            Выйти из аккаунта
                         </button>
                     </div>
                 </div>

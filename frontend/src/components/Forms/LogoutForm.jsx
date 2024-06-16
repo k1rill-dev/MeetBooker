@@ -1,8 +1,11 @@
 import React from 'react';
 import {Navigate} from "react-router-dom";
+import api from "../../api";
 
 const logoutUser = async () => {
-    return null
+    await api.get('/api/logout', {
+        withCredentials: true,
+    })
 }
 
 const LogoutForm = () => {

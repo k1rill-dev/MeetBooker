@@ -1,7 +1,12 @@
 import React, {useEffect, useState} from 'react';
+import getCookie from "../../tools/getCookie";
+import api from "../../api";
+import {useNavigate} from "react-router-dom";
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [user, setUser] = useState({});
+    let nav = useNavigate()
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
@@ -10,7 +15,20 @@ const Header = () => {
         setIsOpen(false);
     };
     useEffect(() => {
-
+        const fetchUserData = async () => {
+            try {
+                const response = await api.get('/api/', {
+                    withCredentials: true
+                });
+                setUser(response.data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        let isLogin = getCookie('login')
+        if(isLogin){
+            fetchUserData();
+        }
     }, []);
 
     return (
@@ -28,11 +46,12 @@ const Header = () => {
                     <a href="/"
                        className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out">Главная</a>
                     <a href="/specialists"
-                       className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out">Все специалисты</a>
+                       className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out">Все
+                        специалисты</a>
                 </nav>
                 <div className="flex items-center">
                     <nav className="hidden md:flex md:items-center md:space-x-4">
-                        <a href='/login'>Войти в аккаунт</a>
+                        {user.email ? <a href='/profile'>{user.email}</a> : <a href='/login'>Войти в аккаунт</a>}
                     </nav>
                     <div className="md:hidden">
                         <button onClick={toggleMenu} className="text-gray-800 focus:outline-none">
@@ -55,7 +74,8 @@ const Header = () => {
                     <a href="/"
                        className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out block py-2">Главная</a>
                     <a href="/concerts"
-                       className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out block py-2">Что эт</a>
+                       className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out block py-2">Что
+                        эт</a>
                     <div className="flex items-center mt-4">
                         <a href='/login'>Войти в аккаунт</a>
                     </div>
