@@ -18,7 +18,20 @@ async def get_appointment(uow: UnitOfWorkDependency, user: UserSchema = Depends(
     :param user:
     :return:
     """
+    print(user)
     appointment = await AppointmentService().joined_list(uow=uow, user_id=user.id)
+    return appointment
+
+
+@schedule_routes.get("/spec-appointment")
+async def get_specialist_appointment(uow: UnitOfWorkDependency, user: UserSchema = Depends(get_specialist_from_token)):
+    """
+    Возвращает все брони специалиста
+    :param uow:
+    :param user:
+    :return:
+    """
+    appointment = await AppointmentService().joined_list(uow=uow, specialist_id=user.id)
     return appointment
 
 
@@ -37,6 +50,19 @@ async def create_schedule(uow: UnitOfWorkDependency, schedule: CreateScheduleSch
     schedule.end_time = schedule.end_time.replace(tzinfo=None)
     slot = await ScheduleService().add(uow=uow, data=schedule)
     return slot
+
+
+@schedule_routes.delete("/schedule/{schedule_id}")
+async def delete_schedule(uow: UnitOfWorkDependency, schedule_id: UUID,
+                          user: UserSchema = Depends(get_specialist_from_token)):
+    """
+    удаляет слот расписания
+    :param uow:
+    :param schedule_id:
+    :return:
+    """
+    res = await ScheduleService().delete_one(uow, schedule_id)
+    return res
 
 
 @schedule_routes.get("/schedule/{specialist_id}")

@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 from uuid import UUID
 
 from src.schemas.appointments import AppointmentSchema, UpdateAppointmentSchema, CreateAppointmentSchema
@@ -13,10 +13,14 @@ class AppointmentService(AbstractService):
             await uow.commit()
             return res
 
-    async def joined_list(self, uow: IUnitOfWork, user_id):
+    async def joined_list(self, uow: IUnitOfWork, specialist_id: Optional[UUID] = None, user_id: Optional[UUID] = None):
         async with uow:
-            res = await uow.appointments.join_all_appointments(id=user_id)
-            return res
+            if specialist_id:
+                res = await uow.appointments.join_all_appointments(specialist_id=specialist_id)
+                return res
+            elif not specialist_id and user_id:
+                res = await uow.appointments.join_all_appointments(user_id=user_id)
+                return res
 
     async def list(self, uow: IUnitOfWork, **filter_by: Any):
         async with uow:

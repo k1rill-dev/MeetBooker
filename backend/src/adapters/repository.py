@@ -4,7 +4,7 @@ from typing import Union, TypeVar, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
-from sqlalchemy import insert, select, update
+from sqlalchemy import insert, select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 from sqlalchemy.sql import func
@@ -47,6 +47,11 @@ class SQLAlchemyRepository(AbstractRepository):
         res = [row[0].to_read_model() for row in res.all()]
         return res
 
+    async def delete_one(self, pk: UUID):
+        stmt = delete(self.model).where(self.model.id == pk)
+        res = await self.session.execute(stmt)
+        return res
+
     async def join_all(self, **filter_by):
         stmt = ((select(
             Specialist.id, func.sum(SpecialistRating.rating).label('sum_rating'),
@@ -65,7 +70,7 @@ class SQLAlchemyRepository(AbstractRepository):
         response = [JoinedResult(**u._asdict()) for u in res.all()]
         return response
 
-    async def join_all_appointments(self, id):
+    async def join_all_appointments(self, specialist_id: Optional[UUID] = None, user_id: Optional[UUID] = None):
         class AppointmentSchema(BaseModel):
             id: UUID = Field(alias='id')
             user_first_name: str
@@ -76,18 +81,22 @@ class SQLAlchemyRepository(AbstractRepository):
             slot_end_time: datetime
             is_confirmed: bool
 
-        stmt = (
-            select(Appointment)
-            .join(User, Appointment.user_id == User.id)
-            .join(Specialist, Appointment.specialist_id == Specialist.id)
-            .join(ScheduleSlot, Appointment.slot_id == ScheduleSlot.id)
-            .filter(Appointment.user_id == id)
-            .options(
-                joinedload(Appointment.user),
-                joinedload(Appointment.specialist),
-                joinedload(Appointment.slot)
-            )
+        stmt = select(Appointment)
+        if specialist_id and not user_id:
+            stmt = stmt.filter(Appointment.specialist_id == specialist_id)
+        if user_id and not specialist_id:
+            stmt = stmt.filter(Appointment.user_id == user_id)
+
+        stmt = stmt.join(User, Appointment.user_id == User.id)
+        stmt = stmt.join(Specialist, Appointment.specialist_id == Specialist.id)
+        stmt = stmt.join(ScheduleSlot, Appointment.slot_id == ScheduleSlot.id)
+
+        stmt = stmt.options(
+            joinedload(Appointment.user),
+            joinedload(Appointment.specialist),
+            joinedload(Appointment.slot)
         )
+
         res = await self.session.execute(stmt)
         appointment_schemas = [
             AppointmentSchema(
@@ -103,8 +112,6 @@ class SQLAlchemyRepository(AbstractRepository):
             for appointment in res.scalars().all()
         ]
         return appointment_schemas
-        # response = [JoinedResult(**u._asdict()) for u in res.all()]
-        # return response
 
     async def find_one(self, **filter_by) -> BaseModel:
         stmt = select(self.model).filter_by(**filter_by)

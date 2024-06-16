@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import getCookie from "../../tools/getCookie";
 import api from "../../api";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -22,10 +22,10 @@ const Header = () => {
             try {
                 const isLogin = getCookie('login');
                 if (isLogin) {
-                    const userDataResponse = await api.get('/api/', { withCredentials: true });
+                    const userDataResponse = await api.get('/api/', {withCredentials: true});
                     setUser(userDataResponse.data);
 
-                    const specDataResponse = await api.get('/api/specialist-by-user-id', { withCredentials: true });
+                    const specDataResponse = await api.get('/api/specialist-by-user-id', {withCredentials: true});
                     setSpecData(specDataResponse.data);
                 }
             } catch (error) {
@@ -48,8 +48,11 @@ const Header = () => {
                     MeetBooker
                 </div>
                 <nav className="hidden md:flex md:items-center md:space-x-4 md:flex-1 md:justify-center">
-                    <a href="/" className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out">Главная</a>
-                    <a href="/specialists" className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out">Все специалисты</a>
+                    <a href="/"
+                       className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out">Главная</a>
+                    <a href="/specialists"
+                       className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out">Все
+                        специалисты</a>
                 </nav>
                 <div className="flex items-center">
                     <nav className="hidden md:flex md:items-center md:space-x-4">
@@ -62,23 +65,32 @@ const Header = () => {
                     <div className="md:hidden">
                         <button onClick={toggleMenu} className="text-gray-800 focus:outline-none">
                             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7"/>
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                      d="M4 6h16M4 12h16m-7 6h7"/>
                             </svg>
                         </button>
                     </div>
                 </div>
             </div>
-            <nav className={`fixed top-0 right-0 h-full w-full md:hidden z-20 transition-transform ${isOpen ? 'translate-x-0' : 'translate-x-full'} bg-gray-100 shadow-lg p-4`}>
+            <nav
+                className={`fixed top-0 right-0 h-full w-full md:hidden z-20 transition-transform ${isOpen ? 'translate-x-0' : 'translate-x-full'} bg-gray-100 shadow-lg p-4`}>
                 <button onClick={closeMenu} className="absolute top-0 right-0 m-4 text-gray-800 focus:outline-none">
                     <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
                 <div className="py-2 flex flex-col items-center">
-                    <a href="/" className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out block py-2">Главная</a>
-                    <a href="/concerts" className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out block py-2">Что эт</a>
+                    <a href="/"
+                       className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out block py-2">Главная</a>
+                    <a href="/concerts"
+                       className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out block py-2">Что
+                        эт</a>
                     <div className="flex items-center mt-4">
-                        <a href='/login'>Войти в аккаунт</a>
+                        {specData.speciality ? (
+                            <a href='/spec-profile'>{user.email}</a>
+                        ) : (
+                            user.email ? <a href='/profile'>{user.email}</a> : <a href='/login'>Войти в аккаунт</a>
+                        )}
                     </div>
                 </div>
             </nav>

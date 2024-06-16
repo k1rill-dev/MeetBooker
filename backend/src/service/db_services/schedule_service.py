@@ -24,3 +24,9 @@ class ScheduleService(AbstractService):
             res = await uow.schedule_slots.edit_one(pk=pk, data=data.dict(exclude_none=True))
             await uow.commit()
             return res
+
+    async def delete_one(self, uow: IUnitOfWork, pk: UUID):
+        async with uow:
+            res = await uow.schedule_slots.delete_one(pk=pk)
+            await uow.commit()
+            return res

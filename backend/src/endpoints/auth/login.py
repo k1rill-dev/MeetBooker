@@ -1,4 +1,5 @@
 import pathlib
+from typing import Optional
 
 from fastapi import APIRouter, Depends, UploadFile, Request, Form
 from pydantic import NameEmail
@@ -51,10 +52,10 @@ async def rotate_token(response: Response, uow: UnitOfWorkDependency,
 
 
 async def _update_user_data(request: Request, uow: UnitOfWorkDependency,
-                            file: UploadFile,
-                            user: UserSchema,
-                            email: NameEmail,
-                            first_name: str, last_name: str):
+                            file: Optional[UploadFile],
+                            user: Optional[UserSchema],
+                            email: Optional[NameEmail],
+                            first_name: Optional[str], last_name: Optional[str]):
     if file is None:
         profile_picture = None
     else:
@@ -67,9 +68,9 @@ async def _update_user_data(request: Request, uow: UnitOfWorkDependency,
                 await f.flush()
         profile_picture = str(request.url_for('media', path=path_to_save))
     updated_data = UpdateUserSchema(
-        email=email.email,
-        first_name=first_name,
-        last_name=last_name,
+        email=email.email if email is not None else None,
+        first_name=first_name if first_name is not None else None,
+        last_name=last_name if last_name is not None else None,
         profile_picture=profile_picture,
     )
     data = updated_data.dict(exclude_none=True)
