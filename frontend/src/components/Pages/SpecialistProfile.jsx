@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import {Button} from 'flowbite-react';
+import { Button } from 'flowbite-react';
 import './SpecialistProfile.css';
 import SpecialistCard from '../Cards/SpecialistCard';
-import {useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import {BACKEND_API_URL} from '../../api';
+import api, { BACKEND_API_URL } from '../../api';
 import ReactStars from 'react-rating-stars-component';
+import getCookie from "../../tools/getCookie";
 
 Modal.setAppElement('#root');
 
@@ -19,7 +20,8 @@ const SpecialistProfile = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [rating, setRating] = useState(0);
     const [userRating, setUserRating] = useState(0);
-    const [rightSideItems, setRightSideItems] = useState([])
+    const [rightSideItems, setRightSideItems] = useState([]);
+    const [hasRated, setHasRated] = useState(false);
 
     const params = useParams();
     const id = params.id;
@@ -39,18 +41,19 @@ const SpecialistProfile = () => {
             })
             .catch((err) => console.log(err));
     }, [id]);
+
     useEffect(() => {
         axios
             .get(`${BACKEND_API_URL}/api/specialist?page=1&size=4`)
             .then((res) => {
-                console.log(res.data.items)
                 setRightSideItems(res.data.items);
             })
             .catch((err) => console.log(err));
     }, []);
+
     useEffect(() => {
-        axios
-            .get(`${BACKEND_API_URL}/api/schedule/${id}`)
+        api
+            .get(`/api/schedule/${id}`)
             .then((res) => {
                 const newSchedule = res.data.reduce((acc, slot) => {
                     const date = slot.start_time.split('T')[0];
@@ -60,10 +63,12 @@ const SpecialistProfile = () => {
                     acc[date].push({
                         start_time: slot.start_time.split('T')[1].slice(0, 5),
                         end_time: slot.end_time.split('T')[1].slice(0, 5),
-                        is_booked: slot.is_booked
+                        is_booked: slot.is_booked,
+                        slot_id: slot.id // Make sure this is correct
                     });
                     return acc;
                 }, {});
+                console.log(newSchedule);
                 setSchedule(newSchedule);
             })
             .catch((err) => console.log(err));
@@ -86,7 +91,7 @@ const SpecialistProfile = () => {
     const formattedSelectedDate = formatDate(selectedDate);
     const availableTimes = schedule[formattedSelectedDate] || [];
 
-    const tileContent = ({date, view}) => {
+    const tileContent = ({ date, view }) => {
         const formattedDate = formatDate(date);
         if (view === 'month' && schedule[formattedDate]) {
             return (
@@ -109,23 +114,67 @@ const SpecialistProfile = () => {
 
     const handleBooking = () => {
         if (selectedTime) {
-            // Perform booking action
-            alert(`Booking confirmed for ${selectedTime} on ${formattedSelectedDate}`);
-            handleModalToggle();
+            const selectedSlot = availableTimes.find(slot => slot.start_time === selectedTime);
+
+            const bookingDetails = {
+                user_id: getCookie('login'), // замените это реальным user_id
+                specialist_id: id,
+                slot_id: selectedSlot.slot_id,
+                is_confirmed: true
+            };
+
+            api.post(`/api/appointment`, bookingDetails)
+                .then(response => {
+                    if (response.data.success) {
+                        alert(`Booking confirmed for ${selectedTime} on ${formattedSelectedDate}`);
+                        // Optionally, update the schedule to reflect the new booking
+                        setSchedule(prevSchedule => ({
+                            ...prevSchedule,
+                            [formattedSelectedDate]: prevSchedule[formattedSelectedDate].map(slot =>
+                                slot.start_time === selectedTime ? { ...slot, is_booked: true } : slot
+                            )
+                        }));
+                        handleModalToggle();
+                    } else {
+                        setErrorMessage('Failed to book the slot. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error("There was an error booking the slot!", error);
+                    setErrorMessage('Failed to book the slot. Please try again.');
+                });
         } else {
             setErrorMessage('Please select a time slot');
         }
     };
 
     const ratingChanged = (newRating) => {
+        if (hasRated) {
+            alert("You have already rated this specialist.");
+            return;
+        }
+
         setUserRating(newRating);
 
-        axios
-            .post(`${BACKEND_API_URL}/api/rate/${id}`, {rating: newRating})
+        const ratingDetails = {
+            user_id: getCookie('login'), // замените это реальным user_id
+            specialist_id: id,
+            rating: newRating
+        };
+
+        api
+            .post(`/api/specialist-rating`, ratingDetails)
             .then((res) => {
-                setRating(res.data.new_rating); // Assuming the new average rating is returned
+                if (res.data.success) {
+                    setRating(res.data.new_rating);
+                    setHasRated(true);
+                } else {
+                    console.log("Failed to update the rating.");
+                }
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     return (
@@ -151,8 +200,8 @@ const SpecialistProfile = () => {
                                 size={40}
                                 activeColor="#ffd700"
                                 value={rating}
+                                edit={!hasRated}
                             />
-                            <p>Ваш рейтинг: {userRating}</p>
                         </div>
                         <Button
                             className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out"
@@ -219,9 +268,11 @@ const SpecialistProfile = () => {
                         </div>
                     </Modal>
                 </div>
+                {/* Right Side - Specialist Cards */}
                 <div className="p-6">
                     {rightSideItems.map((item, index) => (
                         <SpecialistCard
+                            key={index}
                             name={item.first_name}
                             expertise={item.speciality}
                             description={item.bio}

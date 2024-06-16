@@ -54,7 +54,7 @@ class SQLAlchemyRepository(AbstractRepository):
 
     async def join_all(self, **filter_by):
         stmt = ((select(
-            Specialist.id, func.sum(SpecialistRating.rating).label('sum_rating'),
+            Specialist.id, func.avg(SpecialistRating.rating).label('sum_rating'),
             Specialist.user_id, User.first_name, User.last_name, User.email, Specialist.bio,
             Specialist.speciality, User.profile_picture)
                  .join(User, User.id == Specialist.user_id)
