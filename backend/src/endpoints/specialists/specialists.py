@@ -3,16 +3,16 @@ from fastapi import APIRouter, Depends
 from fastapi_pagination import Page, paginate
 from src.endpoints.dependencies import UnitOfWorkDependency, get_user_from_token, get_specialist_from_token
 from src.schemas.specialists import SpecialistSchema, SpecialistRatingSchema, CreateSpecialistSchema, \
-    UpdateSpecialistSchema, CreateSpecialistRatingSchema
+    UpdateSpecialistSchema, CreateSpecialistRatingSchema, JoinedResult
 from src.schemas.user import UserSchema
 from src.service.db_services.specialist_service import SpecialistService, SpecialistRatingService
 
 specialists_router = APIRouter(tags=["specialists"])
 
 
-@specialists_router.get("/specialist", response_model=Page[SpecialistSchema])
+@specialists_router.get("/specialist", response_model=Page[JoinedResult])
 async def get_all_specialists(uow: UnitOfWorkDependency):
-    data = await SpecialistService().list(uow=uow)
+    data = await SpecialistService().joined_list(uow=uow)
     return paginate(data)
 
 
@@ -24,13 +24,8 @@ async def create_specialist(uow: UnitOfWorkDependency, spec: CreateSpecialistSch
 
 @specialists_router.get("/specialist/{id}")
 async def get_specialist(id: UUID, uow: UnitOfWorkDependency):
-    specialist = await SpecialistService().get(id, uow)
-    res = await SpecialistRatingService().list(uow=uow, specialist_id=id)
-    print(res)
-    return {
-        "specialist": specialist,
-        "rating": res[0]
-    }
+    data = await SpecialistService().joined_list(uow=uow, specialist_id=id)
+    return data[0]
 
 
 @specialists_router.patch("/specialist")

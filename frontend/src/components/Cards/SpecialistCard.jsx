@@ -1,8 +1,8 @@
 import React from 'react';
 
-const SpecialistCard = ({ name, expertise, description }) => {
+const SpecialistCard = ({key, name, expertise, description, rating}) => {
     return (
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-4">
+        <div key={key} className="bg-white rounded-lg shadow-lg p-6 mb-4">
             <div className="flex items-center mb-4">
                 <img
                     src="https://via.placeholder.com/150"
@@ -15,6 +15,7 @@ const SpecialistCard = ({ name, expertise, description }) => {
                 </div>
             </div>
             <p className="text-gray-700">{description}</p>
+            <p className="text-gray-700">Рейтинг: {rating}</p>
         </div>
     );
 };

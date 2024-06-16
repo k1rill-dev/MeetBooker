@@ -27,8 +27,8 @@ const Header = () => {
                 <nav className="hidden md:flex md:items-center md:space-x-4 md:flex-1 md:justify-center">
                     <a href="/"
                        className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out">Главная</a>
-                    <a href="/concerts"
-                       className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out">что эт</a>
+                    <a href="/specialists"
+                       className="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out">Все специалисты</a>
                 </nav>
                 <div className="flex items-center">
                     <nav className="hidden md:flex md:items-center md:space-x-4">

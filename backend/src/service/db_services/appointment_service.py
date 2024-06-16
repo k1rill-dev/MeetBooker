@@ -13,6 +13,11 @@ class AppointmentService(AbstractService):
             await uow.commit()
             return res
 
+    async def joined_list(self, uow: IUnitOfWork, user_id):
+        async with uow:
+            res = await uow.appointments.join_all_appointments(id=user_id)
+            return res
+
     async def list(self, uow: IUnitOfWork, **filter_by: Any):
         async with uow:
             res = await uow.appointments.find_all(**filter_by)

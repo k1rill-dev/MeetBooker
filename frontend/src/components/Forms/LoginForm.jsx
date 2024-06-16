@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {BACKEND_API_URL} from "../../api";
+import api, {BACKEND_API_URL} from "../../api";
 import {handleYandexLogin} from "../../tools/yandex";
 
 const login = async (sendData) => {
-    const {data, status} = await axios.post(BACKEND_API_URL + '/api/login', sendData, {
+    const {data, status} = await api.post('/api/login', sendData, {
         headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json'

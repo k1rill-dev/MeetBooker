@@ -18,7 +18,7 @@ async def get_appointment(uow: UnitOfWorkDependency, user: UserSchema = Depends(
     :param user:
     :return:
     """
-    appointment = await AppointmentService().list(uow=uow, user_id=user.id)
+    appointment = await AppointmentService().joined_list(uow=uow, user_id=user.id)
     return appointment
 
 

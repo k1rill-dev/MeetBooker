@@ -14,6 +14,18 @@ class BaseSpecialistSchema(BaseModel):
         from_attributes = True
 
 
+class JoinedResult(BaseModel):
+    spec_id: UUID = Field(alias='id', serialization_alias='spec_id')
+    user_id: UUID
+    first_name: str
+    last_name: str
+    email: str
+    bio: str
+    speciality: str
+    profile_picture: Optional[str] = None
+    sum_rating: float
+
+
 class SpecialistSchema(BaseSpecialistSchema):
     id: UUID = Field(default_factory=uuid.uuid4)
 

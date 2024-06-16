@@ -2,12 +2,12 @@ import React from 'react';
 import SpecialistRegistration from "./SpecialistRegistration";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {BACKEND_API_URL} from "../../api";
+import api, {BACKEND_API_URL} from "../../api";
 import {handleYandexLogin} from "../../tools/yandex";
 
 
 const register = async (user) => {
-    const {data, status} = await axios.post(BACKEND_API_URL + "/api/register", user, {
+    const {data, status} = await api.post("/api/register", user, {
         headers: {
             'Content-Type': 'application/json'
         },
@@ -17,7 +17,7 @@ const register = async (user) => {
 }
 
 const addSpecialist = async (specData) => {
-    const {data, status} = await axios.post(BACKEND_API_URL + "/api/specialist", specData, {
+    const {data, status} = await api.post(BACKEND_API_URL + "/api/specialist", specData, {
         headers: {
             'Content-Type': 'application/json'
         },

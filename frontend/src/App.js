@@ -49,14 +49,16 @@ function App() {
                     </div>
                 )}>
                 </Route>
-                <Route path="/specialist" element={(
-                    <div>
-                        <Header></Header>
-                        <div className="mt-4"></div>
-                        <SpecialistProfile></SpecialistProfile>
-                        <Footer></Footer>
-                    </div>
-                )}>
+                <Route path="/specialist">
+                    <Route path=":id" element={(
+                        <div>
+                            <Header></Header>
+                            <div className="mt-4"></div>
+                            <SpecialistProfile></SpecialistProfile>
+                            <Footer></Footer>
+                        </div>
+                    )}>
+                    </Route>
                 </Route>
                 <Route path="/logout" element={(
                     <div>

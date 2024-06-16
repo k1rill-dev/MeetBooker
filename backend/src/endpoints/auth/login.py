@@ -55,18 +55,22 @@ async def _update_user_data(request: Request, uow: UnitOfWorkDependency,
                             user: UserSchema,
                             email: NameEmail,
                             first_name: str, last_name: str):
-    path_to_save = f"{str(user.id)}/{file.filename}"
-    if not pathlib.Path(settings.path_to_media.joinpath(f"{str(user.id)}")).exists():
-        pathlib.Path(settings.path_to_media.joinpath(f"{str(user.id)}")).mkdir(parents=True)
-    async with aiofiles.open(settings.path_to_media.joinpath(f"{str(user.id)}/" + file.filename), "wb") as f:
-        while contents := file.file.read(1024 * 1024):
-            await f.write(contents)
-            await f.flush()
+    if file is None:
+        profile_picture = None
+    else:
+        path_to_save = f"{str(user.id)}/{file.filename}"
+        if not pathlib.Path(settings.path_to_media.joinpath(f"{str(user.id)}")).exists():
+            pathlib.Path(settings.path_to_media.joinpath(f"{str(user.id)}")).mkdir(parents=True)
+        async with aiofiles.open(settings.path_to_media.joinpath(f"{str(user.id)}/" + file.filename), "wb") as f:
+            while contents := file.file.read(1024 * 1024):
+                await f.write(contents)
+                await f.flush()
+        profile_picture = str(request.url_for('media', path=path_to_save))
     updated_data = UpdateUserSchema(
         email=email.email,
         first_name=first_name,
         last_name=last_name,
-        profile_picture=str(request.url_for('media', path=path_to_save)),
+        profile_picture=profile_picture,
     )
     data = updated_data.dict(exclude_none=True)
     user = await UserService().edit(pk=user.id, data=data, uow=uow)

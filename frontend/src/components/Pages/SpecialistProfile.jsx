@@ -1,12 +1,14 @@
-// SpecialistProfile.js
-
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Modal from 'react-modal';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { Button } from 'flowbite-react';
+import {Button} from 'flowbite-react';
 import './SpecialistProfile.css';
-import SpecialistCard from "../Cards/SpecialistCard";
+import SpecialistCard from '../Cards/SpecialistCard';
+import {useParams} from 'react-router-dom';
+import axios from 'axios';
+import {BACKEND_API_URL} from '../../api';
+import ReactStars from 'react-rating-stars-component';
 
 Modal.setAppElement('#root');
 
@@ -15,10 +17,56 @@ const SpecialistProfile = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedTime, setSelectedTime] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [rating, setRating] = useState(0);
+    const [userRating, setUserRating] = useState(0);
+    const [rightSideItems, setRightSideItems] = useState([])
+
+    const params = useParams();
+    const id = params.id;
+    const [items, setItems] = useState({});
+    const [schedule, setSchedule] = useState({});
 
     const handleModalToggle = () => {
         setIsModalOpen(!isModalOpen);
     };
+
+    useEffect(() => {
+        axios
+            .get(`${BACKEND_API_URL}/api/specialist/${id}`)
+            .then((res) => {
+                setItems(res.data);
+                setRating(res.data.rating || 0); // Assuming the rating is part of the specialist data
+            })
+            .catch((err) => console.log(err));
+    }, [id]);
+    useEffect(() => {
+        axios
+            .get(`${BACKEND_API_URL}/api/specialist?page=1&size=4`)
+            .then((res) => {
+                setRightSideItems(res.data.items);
+            })
+            .catch((err) => console.log(err));
+    }, []);
+    useEffect(() => {
+        axios
+            .get(`${BACKEND_API_URL}/api/schedule/${id}`)
+            .then((res) => {
+                const newSchedule = res.data.reduce((acc, slot) => {
+                    const date = slot.start_time.split('T')[0];
+                    if (!acc[date]) {
+                        acc[date] = [];
+                    }
+                    acc[date].push({
+                        start_time: slot.start_time.split('T')[1].slice(0, 5),
+                        end_time: slot.end_time.split('T')[1].slice(0, 5),
+                        is_booked: slot.is_booked
+                    });
+                    return acc;
+                }, {});
+                setSchedule(newSchedule);
+            })
+            .catch((err) => console.log(err));
+    }, [id]);
 
     const onDateChange = (date) => {
         setSelectedDate(date);
@@ -30,11 +78,6 @@ const SpecialistProfile = () => {
         setSelectedTime(event.target.value);
     };
 
-    const schedule = {
-        '2024-06-12': ['10:00', '14:00', '16:00'],
-        '2024-06-13': ['09:00', '12:00', '15:00'],
-    };
-
     const formatDate = (date) => {
         return date.toISOString().split('T')[0];
     };
@@ -42,13 +85,20 @@ const SpecialistProfile = () => {
     const formattedSelectedDate = formatDate(selectedDate);
     const availableTimes = schedule[formattedSelectedDate] || [];
 
-    const tileContent = ({ date, view }) => {
+    const tileContent = ({date, view}) => {
         const formattedDate = formatDate(date);
         if (view === 'month' && schedule[formattedDate]) {
             return (
-                <ul className="text-xs text-center">
-                    {schedule[formattedDate].map((time, index) => (
-                        <li key={index}>{time}</li>
+                <ul className="text-xs text-center list-none p-0">
+                    {schedule[formattedDate].map((slot, index) => (
+                        <li
+                            key={index}
+                            className={`${
+                                slot.is_booked ? 'text-red-500' : 'text-green-500'
+                            }`}
+                        >
+                            {slot.start_time} - {slot.end_time}
+                        </li>
                     ))}
                 </ul>
             );
@@ -66,28 +116,51 @@ const SpecialistProfile = () => {
         }
     };
 
+    const ratingChanged = (newRating) => {
+        setUserRating(newRating);
+
+        axios
+            .post(`${BACKEND_API_URL}/api/rate/${id}`, {rating: newRating})
+            .then((res) => {
+                setRating(res.data.new_rating); // Assuming the new average rating is returned
+            })
+            .catch((err) => console.log(err));
+    };
+
     return (
         <div className="container mx-auto">
             <div className="grid md:grid-cols-2 gap-8 p-6 bg-gray-100 rounded-lg shadow-lg">
                 {/* Left Side */}
                 <div className="p-6 border-b md:border-b-0 md:border-r border-gray-200">
-                    <img
-                        src="https://via.placeholder.com/150"
-                        alt="Иван Иванов"
-                        className="w-24 h-24 rounded-full border-4 border-blue-500 mb-4 mx-auto"
-                    />
-                    <h2 className="text-3xl font-bold mb-2 text-center">Иван Иванов</h2>
-                    <p className="text-lg text-gray-700 mb-4 text-center">Специалист по программированию</p>
-                    <p className="text-gray-700 mb-4">
-                        Иван Иванов - специалист с многолетним опытом в программировании. Занимается разработкой
-                        веб-приложений, баз данных и многим другим.
-                    </p>
-                    <Button
-                        className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out self-center"
-                        onClick={handleModalToggle}
-                    >
-                        Забронировать время
-                    </Button>
+                    <div className="flex flex-col items-center">
+                        <img
+                            src="https://via.placeholder.com/150"
+                            alt="Иван Иванов"
+                            className="w-24 h-24 rounded-full border-4 border-blue-500 mb-4"
+                        />
+                        <h2 className="text-3xl font-bold mb-2 text-center">
+                            {items.first_name} {items.last_name}
+                        </h2>
+                        <p className="text-lg text-gray-700 mb-4 text-center">{items.speciality}</p>
+                        <p className="text-gray-700 mb-4 text-center">{items.bio}</p>
+                        <div className="text-center mb-4">
+                            <h3 className="text-xl font-bold">Рейтинг: {items.sum_rating}</h3>
+                            <ReactStars
+                                count={5}
+                                onChange={ratingChanged}
+                                size={40}
+                                activeColor="#ffd700"
+                                value={rating}
+                            />
+                            <p>Ваш рейтинг: {userRating}</p>
+                        </div>
+                        <Button
+                            className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out"
+                            onClick={handleModalToggle}
+                        >
+                            Забронировать время
+                        </Button>
+                    </div>
                     <Modal
                         isOpen={isModalOpen}
                         onRequestClose={handleModalToggle}
@@ -118,9 +191,9 @@ const SpecialistProfile = () => {
                                         className="block w-full bg-white border border-gray-300 px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
                                     >
                                         <option value="">-- Выберите время --</option>
-                                        {availableTimes.map((time, index) => (
-                                            <option key={index} value={time}>
-                                                {time}
+                                        {availableTimes.filter(slot => !slot.is_booked).map((slot, index) => (
+                                            <option key={index} value={slot.start_time}>
+                                                {slot.start_time} - {slot.end_time}
                                             </option>
                                         ))}
                                     </select>
@@ -146,20 +219,16 @@ const SpecialistProfile = () => {
                         </div>
                     </Modal>
                 </div>
-
                 {/* Right Side - Specialist Cards */}
                 <div className="p-6">
-                    <SpecialistCard
-                        name="Петр Петров"
-                        expertise="Специалист по дизайну"
-                        description="Петр Петров имеет большой опыт в создании креативных и функциональных дизайнов для веб-приложений."
-                    />
-                    <SpecialistCard
-                        name="Мария Сидорова"
-                        expertise="Специалист по UX/UI"
-                        description="Мария Сидорова специализируется на создании интуитивно понятных пользовательских интерфейсов."
-                    />
-                    {/* Add more SpecialistCard components as needed */}
+                    {rightSideItems.map((item, index) => (
+                        <SpecialistCard
+                            name={item.first_name}
+                            expertise={item.speciality}
+                            description={item.bio}
+                            rating={item.sum_rating}
+                        />
+                    ))}
                 </div>
             </div>
         </div>

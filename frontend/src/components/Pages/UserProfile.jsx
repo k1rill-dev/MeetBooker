@@ -1,28 +1,85 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import EditUserModal from "../Modals/EditUserModal";
+import api from "../../api";
 
 const UserProfile = () => {
-    const [user, setUser] = useState({
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        bookings: [
-            {id: 1, date: '2024-06-15', status: 'Confirmed'},
-            {id: 2, date: '2024-06-17', status: 'Pending'},
-        ],
-        bookingHistory: [
-            {id: 3, date: '2024-06-10', status: 'Completed'},
-            {id: 4, date: '2024-05-25', status: 'Completed'},
-        ],
-    });
-
+    const [user, setUser] = useState(null);
+    const [bookings, setBookings] = useState([]);
+    const [bookingHistory, setBookingHistory] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const history = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Simulate API call to update user data
-        // In a real app, this would be replaced with an actual API call
-        console.log('Updated user:', user);
-        setIsModalOpen(false);
+    useEffect(() => {
+        // Функция для загрузки данных пользователя
+        const fetchUserData = async () => {
+            try {
+                const response = await api.get('/api/', {
+                    withCredentials: true
+                });
+                setUser(response.data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                if (error.response && error.response.status === 404) {
+                    history('/login');
+                }
+            }
+        };
+
+        // Функция для загрузки данных о бронированиях
+        const fetchAppointments = async () => {
+            try {
+                const response = await api.get('/api/appointment', {
+                    withCredentials: true
+                });
+
+                const currentDate = new Date();
+
+                // Фильтрация актуальных бронирований (по дате)
+                const activeBookings = response.data.filter(booking => {
+                    const endTime = new Date(booking.slot_end_time);
+                    return endTime >= currentDate && booking.user_first_name === user.first_name && booking.user_last_name === user.last_name && booking.is_confirmed;
+                });
+
+                // Фильтрация бронирований в истории (прошедшие по дате)
+                const historyBookings = response.data.filter(booking => {
+                    const endTime = new Date(booking.slot_end_time);
+                    return endTime < currentDate && booking.user_first_name === user.first_name && booking.user_last_name === user.last_name && booking.is_confirmed;
+                });
+
+                setBookings(activeBookings);
+                setBookingHistory(historyBookings);
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+            }
+        };
+
+        // Вызов функций загрузки данных
+        if (!user) {
+            fetchUserData();
+        }
+        if (user) {
+            fetchAppointments();
+        }
+    }, [history, user]);
+
+    const handleSubmit = async (formData) => {
+        try {
+            const response = await api.patch('/api/update_user', formData, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            setUser(response.data);
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error('Error updating user data:', error);
+            if (error.response && error.response.status === 404) {
+                history('/login');
+            }
+        }
     };
 
     const openModal = () => {
@@ -33,6 +90,10 @@ const UserProfile = () => {
         setIsModalOpen(false);
     };
 
+    if (!user) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center">
             <div className="bg-white w-full max-w-4xl rounded-lg shadow-lg overflow-hidden">
@@ -41,12 +102,12 @@ const UserProfile = () => {
                         <div className="md:flex-shrink-0">
                             <img
                                 className="h-24 w-24 rounded-full object-cover mx-auto md:mx-0 md:mr-4"
-                                src="https://randomuser.me/api/portraits/men/1.jpg"
+                                src={user.profile_picture || "https://randomuser.me/api/portraits/men/1.jpg"}
                                 alt="User avatar"
                             />
                         </div>
                         <div className="mt-4 md:mt-0">
-                            <h1 className="text-2xl font-bold text-gray-800">{user.name}</h1>
+                            <h1 className="text-2xl font-bold text-gray-800">{`${user.first_name} ${user.last_name}`}</h1>
                             <p className="text-sm text-gray-600">{user.email}</p>
                         </div>
                     </div>
@@ -55,67 +116,82 @@ const UserProfile = () => {
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             onClick={openModal}
                         >
-                            Edit Profile
+                            Редактировать профиль
                         </button>
                     </div>
                 </div>
 
                 <div className="border-t border-gray-200 px-6 py-4">
-                    <div className="border-t border-gray-200 px-6 py-4">
-                        <div className="mb-8">
-                            <h2 className="text-xl font-semibold text-gray-800">Bookings</h2>
-                            <div className="mt-4">
-                                {user.bookings.length > 0 ? (
-                                    <div className="overflow-x-auto">
-                                        <table className="table-auto w-full border-collapse">
-                                            <thead>
-                                            <tr className="bg-gray-100">
-                                                <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase border-b">Date</th>
-                                                <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase border-b">Status</th>
+                    <div className="mb-8">
+                        <h2 className="text-xl font-semibold text-gray-800">Текущие брони</h2>
+                        <div className="mt-4">
+                            {bookings.length > 0 ? (
+                                <div className="overflow-x-auto">
+                                    <table className="table-auto w-full border-collapse">
+                                        <thead>
+                                        <tr className="bg-gray-100">
+                                            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase border-b">Время
+                                                начала
+                                            </th>
+                                            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase border-b">Время
+                                                окончания
+                                            </th>
+                                            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase border-b">Специалист</th>
+                                            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase border-b">Статус</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {bookings.map(booking => (
+                                            <tr key={booking.id} className="border-b">
+                                                <td className="px-4 py-3 text-sm text-gray-600">{new Date(booking.slot_start_time).toLocaleString()}</td>
+                                                <td className="px-4 py-3 text-sm text-gray-600">{new Date(booking.slot_end_time).toLocaleString()}</td>
+                                                <td className="px-4 py-3 text-sm text-gray-600">{`${booking.specialist_first_name} ${booking.specialist_last_name}`}</td>
+                                                <td className="px-4 py-3 text-sm text-gray-600">Подтверждено</td>
                                             </tr>
-                                            </thead>
-                                            <tbody>
-                                            {user.bookings.map((booking) => (
-                                                <tr key={booking.id} className="border-b">
-                                                    <td className="px-4 py-3 text-sm text-gray-600">{booking.date}</td>
-                                                    <td className="px-4 py-3 text-sm text-gray-600">{booking.status}</td>
-                                                </tr>
-                                            ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                ) : (
-                                    <p className="text-sm text-gray-600">No bookings found.</p>
-                                )}
-                            </div>
+                                        ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            ) : (
+                                <p className="text-sm text-gray-600">У вас нет текущих активных бронирований.</p>
+                            )}
                         </div>
+                    </div>
 
-                        <div>
-                            <h2 className="text-xl font-semibold text-gray-800">Booking History</h2>
-                            <div className="mt-4">
-                                {user.bookingHistory.length > 0 ? (
-                                    <div className="overflow-x-auto">
-                                        <table className="table-auto w-full border-collapse">
-                                            <thead>
-                                            <tr className="bg-gray-100">
-                                                <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase border-b">Date</th>
-                                                <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase border-b">Status</th>
+                    <div>
+                        <h2 className="text-xl font-semibold text-gray-800">История бронирований</h2>
+                        <div className="mt-4">
+                            {bookingHistory.length > 0 ? (
+                                <div className="overflow-x-auto">
+                                    <table className="table-auto w-full border-collapse">
+                                        <thead>
+                                        <tr className="bg-gray-100">
+                                            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase border-b">Время
+                                                начала
+                                            </th>
+                                            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase border-b">Время
+                                                окончания
+                                            </th>
+                                            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase border-b">Специалист</th>
+                                            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 uppercase border-b">Статус</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {bookingHistory.map(historyItem => (
+                                            <tr key={historyItem.id} className="border-b">
+                                                <td className="px-4 py-3 text-sm text-gray-600">{new Date(historyItem.slot_start_time).toLocaleString()}</td>
+                                                <td className="px-4 py-3 text-sm text-gray-600">{new Date(historyItem.slot_end_time).toLocaleString()}</td>
+                                                <td className="px-4 py-3 text-sm text-gray-600">{`${historyItem.specialist_first_name} ${historyItem.specialist_last_name}`}</td>
+                                                <td className="px-4 py-3 text-sm text-gray-600">Подтверждено</td>
                                             </tr>
-                                            </thead>
-                                            <tbody>
-                                            {user.bookingHistory.map((historyItem) => (
-                                                <tr key={historyItem.id} className="border-b">
-                                                    <td className="px-4 py-3 text-sm text-gray-600">{historyItem.date}</td>
-                                                    <td className="px-4 py-3 text-sm text-gray-600">{historyItem.status}</td>
-                                                </tr>
-                                            ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                ) : (
-                                    <p className="text-sm text-gray-600">No booking history found.</p>
-                                )}
-                            </div>
+                                        ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            ) : (
+                                <p className="text-sm text-gray-600">У вас нет подтвержденных бронирований в
+                                    истории.</p>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -124,7 +200,6 @@ const UserProfile = () => {
             {isModalOpen && (
                 <EditUserModal
                     user={user}
-                    setUser={setUser}
                     handleSubmit={handleSubmit}
                     handleClose={closeModal}
                 />

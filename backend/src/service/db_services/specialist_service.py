@@ -22,6 +22,11 @@ class SpecialistService(AbstractService):
             res = await uow.specialist.find_all(**filter_by)
             return res
 
+    async def joined_list(self, uow: IUnitOfWork, **filter_by):
+        async with uow:
+            res = await uow.specialist.join_all(**filter_by)
+            return res
+
     async def get(self, id: UUID, uow: IUnitOfWork):
         async with uow:
             spec = await uow.specialist.find_one(id=id)
@@ -40,7 +45,6 @@ class SpecialistService(AbstractService):
 
 
 class SpecialistRatingService(AbstractService):
-
     async def add(self, uow: IUnitOfWork, data):
         async with uow:
             rating = await uow.specialist_ratings.add_one(data=data.model_dump())
