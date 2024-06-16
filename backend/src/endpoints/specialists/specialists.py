@@ -28,6 +28,13 @@ async def get_specialist(id: UUID, uow: UnitOfWorkDependency):
     return data[0]
 
 
+@specialists_router.get("/specialist-by-user-id")
+async def get_specialist_by_user_id(uow: UnitOfWorkDependency,
+                                    user: UserSchema = Depends(get_specialist_from_token)):
+    data = await SpecialistService().joined_list(uow=uow, specialist_id=user.id)
+    return data[0]
+
+
 @specialists_router.patch("/specialist")
 async def update_specialist(uow: UnitOfWorkDependency,
                             spec_data: UpdateSpecialistSchema,

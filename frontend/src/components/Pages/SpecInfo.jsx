@@ -1,5 +1,4 @@
 import React from 'react';
-import ReviewsAndRatings from "../SpecialistInfo/ReviewsAndRatings";
 import AppointmentsManagement from "../SpecialistInfo/AppointmentsManagement";
 import ScheduleManagement from "../SpecialistInfo/ScheduleManagement";
 import InfoAbout from "../SpecialistInfo/InfoAbout";
@@ -13,7 +12,6 @@ const SpecInfo = () => {
         <ScheduleManagement />
         <AppointmentsManagement />
       </div>
-      <ReviewsAndRatings />
     </div>
   );
 
