@@ -6,7 +6,7 @@ const EditUserModal = ({ user, handleSubmit, handleClose }) => {
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
-        file: null, // Добавляем состояние для файла фотографии
+        file: null,
     });
 
     const handleInputChange = (e) => {
