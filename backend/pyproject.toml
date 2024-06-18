@@ -22,6 +22,7 @@ aiofiles = "^23.2.1"
 sqladmin = {extras = ["full"], version = "^0.17.0"}
 fastapi-admin = "^1.0.4"
 fastapi-pagination = "^0.12.25"
+fastapi-cors = "^0.0.6"
 
 
 [build-system]
